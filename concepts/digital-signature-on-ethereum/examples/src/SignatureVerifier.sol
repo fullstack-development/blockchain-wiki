@@ -14,7 +14,7 @@ contract SignatureVerifier {
         return _recover(hash, v, r, s) == signer;
     }
 
-    /// @notice Восстанавливает публичный адрес приватного улюча, которым была сделана передаваямая подпись
+    /// @notice Восстанавливает публичный адрес приватного ключа, которым была сделана передаваямая подпись
     function _recover(bytes32 hash, uint8 v, bytes32 r, bytes32 s) private pure returns (address) {
         bytes32 prefixedHash = keccak256(abi.encodePacked(PREFIX, hash));
 
