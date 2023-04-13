@@ -15,8 +15,8 @@ contract EIP712 {
 
     error SignatureIsInvalid();
 
-    /// @notice 32-байтовый разделитель домена. Используется для определения свойст конкретного рпиложения.
-    /// Другими словами подпись может использовать только для этого приложения
+    /// @notice 32-байтовый разделитель домена. Используется для определения свойств конкретного приложения.
+    /// Другими словами подпись может использоваться только для этого приложения
     function DOMAIN_SEPARATOR() public view returns (bytes32) {
         return keccak256(
             abi.encode(
@@ -47,7 +47,7 @@ contract EIP712 {
 
     /**
      * @notice Проверяет была ли подпись сделана адресом signer
-     * @param signer Публичный адрес для проверки
+     * @param signer Публичный адрес для проверки, подписавший сообщение
      * @param signature Проверяемая подпись (abi.encoded(r, s, v))
      */
     function isValid(address signer, bytes memory signature) public view returns (bool) {
