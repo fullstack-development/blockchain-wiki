@@ -1,3 +1,3 @@
 # Tools
 
-- [tenderly](./tenderly.md)
+- [Tenderly](./tenderly.md)

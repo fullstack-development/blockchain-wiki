@@ -1,8 +1,8 @@
 ### Blockchain wiki
 
-- [concepts](./concepts/README.md)
+- [Concepts](./concepts/README.md)
 - [EIPs](./EIPs/README.md)
-- [solidity](./solidity/README.MD)
-- [tools](./tools/README.md)
+- [Solidity](./solidity/README.md)
+- [Tools](./tools/README.md)
 
 
