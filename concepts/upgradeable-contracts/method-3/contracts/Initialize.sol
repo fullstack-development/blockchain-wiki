@@ -13,7 +13,7 @@ import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
  *      2. Задеплоить контракт Admin
  *      3. Задеплоить контракт LogicProxy(address Logic, address Admin, 0x)
  *      4. Задеплоить контракт LogicProxy с ABI контракта Logic при помощи встроенного в ремикс функционала "Deploy at address"
- *         Это позволит вызывать методы контракта Logic для контаркта LogicProxy
+ *         Это позволит вызывать методы контракта Logic для контракта LogicProxy
  *      5. Вызвать функцию initialize() на последнем задеплоенном контракте LogicProxy(задеплоен с ABI контракта Logic)
  *         Убедиться, что транзакция прошла успешно. Вызвать функцию initialize() повторно. Убедиться что транзакция вернулась с ошибкой
  *
