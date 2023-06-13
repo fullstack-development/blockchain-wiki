@@ -10,6 +10,7 @@
 Будем рады обратной связи, вкладу в развитие карты и любым видам партнерств.
 
 **Оглавление**:
+- [Algorithms and data structures](./algorithms/README.md)
 - [Concepts](./concepts/README.md)
 - [DeFi](./DeFi/README.md)
 - [Ethereum virtual machine](./ehtereum-virtual-machine/README.md)
