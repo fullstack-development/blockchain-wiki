@@ -25,7 +25,7 @@ contract TokenLogic {
     }
 
     function totalSupply() public view returns (uint256) {
-        // Возвращаем значение из контракта зранилища TotalSupply
+        // Возвращаем значение из контракта хранилища TotalSupply
         return totalSupplyStorage.getTotalSupply();
     }
 
