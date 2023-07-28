@@ -1,0 +1,6 @@
+[submodule "DeFi/lending/aave/contracts/lib/forge-std"]
+	path = DeFi/lending/aave/contracts/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "DeFi/lending/aave/contracts/lib/openzeppelin-contracts"]
+	path = DeFi/lending/aave/contracts/lib/openzeppelin-contracts
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts
