@@ -1,0 +1,6 @@
+[submodule "concepts/stablecoin/contracts/lib/chainlink-brownie-contracts"]
+	path = concepts/stablecoin/contracts/lib/chainlink-brownie-contracts
+	url = https://github.com/smartcontractkit/chainlink-brownie-contracts
+[submodule "concepts/stablecoin/contracts/lib/openzeppelin-contracts"]
+	path = concepts/stablecoin/contracts/lib/openzeppelin-contracts
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts
