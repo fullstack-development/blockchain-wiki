@@ -1,17 +1,17 @@
 # The Graph
--   [Graph](#Graph)
-    -   [Что такое Graph?](#что-такое-Graph)
+-   [Graph](#the-graph)
+    -   [Что такое Graph?](#что-такое-the-graph)
     -   [Как он работает?](#как-он-работает)
     -   [Создание subgraph](#создание-subgraph)
          -   [Определение subgraph.yaml](#1-определение-subgraphyaml)
          -   [Определение schema.graphql](#2-определение-schemagraphql)
          -   [Написание маппингов](#3написание-assemblyscript-mappings)
-              -   [Event Handlers](#eventhandlers)
+              -   [Event Handlers](#event-handlers)
               -   [Call Handlers](#call-handlers)
               -   [Block Handlers](#block-handlers)
               -   [Data Source Template](#data-source-templates)
-              -   [File Data Sourcese](#file-data-sources⁠)
-    -   [Unit testing Framework](#Unit-testing)
+              -   [File Data Sources](#file-data-sources⁠⁠)
+    -   [Unit testing Framework](#unit-test-framework)
     -   [Ссылки](#ссылки)
 
 ## Что такое the Graph?
@@ -508,7 +508,7 @@ export function handleBlock(block: ethereum.Block): void {
 
 Верно, тут нам на помощь пришли шаблонные типы источников, о которых сейчас расскажу.
 
-#### **Data Source Templates**
+#### Data Source Templates
 
 Для примера возьмем Uniswap Factory, который каждый раз деплоит новый контракт NewExchange.
 
