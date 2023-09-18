@@ -17,5 +17,6 @@
 - [EIPs](./EIPs/README.md)
 - [Solidity](./solidity/README.md)
 - [Tools](./tools/README.md)
+- [Blockchains](./blockchains/README.md)
 
 
