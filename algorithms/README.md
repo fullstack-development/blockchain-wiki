@@ -2,8 +2,7 @@
 
 > Эта статья использует в качестве основы для примеров книгу Адитья Бархава "Грокаем алгоритмы".
 
-Сама книга [тут](./book/grokking-algorithms.pdf).
-Примеры кода из книги в этом [репозитории](https://github.com/egonSchiele/grokking_algorithms/tree/master/02_selection_sort).
+Примеры кода из книги в этом [репозитории](https://github.com/egonSchiele/grokking_algorithms).
 
 
 _Опр._ **Алгоритмом** называется набор инструкций для выполнения некоторой задачи.
