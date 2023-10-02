@@ -11,12 +11,12 @@
 
 **Оглавление**:
 - [Algorithms and data structures](./algorithms/README.md)
+- [Blockchains](./blockchains/README.md)
 - [Concepts](./concepts/README.md)
 - [DeFi](./DeFi/README.md)
 - [Ethereum virtual machine](./ehtereum-virtual-machine/README.md)
 - [EIPs](./EIPs/README.md)
 - [Solidity](./solidity/README.md)
 - [Tools](./tools/README.md)
-- [Blockchains](./blockchains/README.md)
 
 
