@@ -1,0 +1,63 @@
+type Wiki @entity {
+  id: ID!
+  owner: String!
+  wikiId: String!
+  type: WikiType!
+}
+
+enum WikiType {
+  small
+  averange
+  big
+}
+
+type Person @entity {
+  id: ID!
+  name: String!
+  passport: Passport
+}
+
+type Passport @entity {
+  id: ID!
+  passportNumber: String!
+  owner: Person
+}
+
+type Author @entity {
+  id: ID!
+  name: String!
+  writtenBooks: [AuthorBook!]! @derivedFrom(field: "author")
+}
+
+type Book @entity {
+  id: ID!
+  title: String!
+  authorsOfThisBook: [AuthorBook!]! @derivedFrom(field: "book")
+}
+
+type AuthorBook @entity {
+  id: ID! # Например, `author.id.concat(book.id)`
+  author: Author!
+  book: Book!
+}
+
+type Product @entity {
+  id: ID!                         
+  name: String!                  
+  price: BigInt!                  
+  manufacturer: Manufacturer!     
+}
+
+type Manufacturer @entity {
+  id: ID!                      
+  name: String!                  
+  products: [Product!]! @derivedFrom(field: "manufacturer")
+}
+
+type _Schema_
+  @fulltext(
+    name: "authorSearch",
+    language: en,
+    algorithm: rank,
+    include: [{ entity: "Author", fields: [{ name: "name" }] }]
+  )
