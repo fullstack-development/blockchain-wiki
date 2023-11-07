@@ -609,7 +609,7 @@ function getHypotheticalAccountLiquidityInternal(
         }
     }
 
-    /// Зашита от переполнения
+    /// Защита от переполнения
     if (vars.sumCollateral > vars.sumBorrowPlusEffects) {
         return (Error.NO_ERROR, vars.sumCollateral - vars.sumBorrowPlusEffects, 0);
     } else {
