@@ -7,10 +7,10 @@ contract TestContract {
 
 // Полезные заметки
 // 1. ABI - двоичный интерфейс контракта, стандартный способ взаимодействия с контрактами внутри экосистемы.
-//    Селектор функции(fucntion selector) - первые 4 байта определяют селектор функции.
+//    Селектор функции(function selector) - первые 4 байта определяют селектор функции.
 //    Начиная с 5-го байта кодируются аргументы функции
 //    Дальше кодируются типы(uint<M>, int<M>, address, uint, int, bool, ..., bytes<M, function> )
-//    Некторые типы не поддерживаются ABI напрямую (address payable, contract, enum, struct). Эти типы поддерживаются через стандартыне типы.
+//    Некоторые типы не поддерживаются ABI напрямую (address payable, contract, enum, struct). Эти типы поддерживаются через стандартные типы.
 //
 //    Есть динамические типы(bytes, string, T[])
 //    Есть статические типы(все остальные)
@@ -22,7 +22,7 @@ contract TestContract {
 //    Ошибки кодируются, как функции.
 //
 //    encode - метод глобального объекта abi для вызова кодирования.
-//    encodePacked - нестандартный метод кодирования, где максимально объдиняются типы.
+//    encodePacked - нестандартный метод кодирования, где максимально объединяются типы.
 //                   Динамические типы кодируются на месте и без длины.
 //                   Элементы массива дополняются, но кодируются на месте.
 //
@@ -92,7 +92,7 @@ contract Encoding {
         return (someString, someOtherString);
     }
 
-    // Альтенативный способ кодирования нескольких строк
+    // Альтернативный способ кодирования нескольких строк
     function multiEncodePacked() public pure returns(bytes memory) {
         bytes memory someString = abi.encodePacked("some string", "it's bigger");
         return someString;
@@ -117,7 +117,7 @@ contract Encoding {
 
     // Пример: получить селектор вызова функции из закодированных данных
     // Реальный кейс с которым пришлось столкнуться, когда из data вызова нужно получить отдельно селектор функции и аргументы функции
-    function getFuncSelectorAndArgs() public view returns (bytes4 selector, bool isSelecor, uint, address) {
+    function getFuncSelectorAndArgs() public view returns (bytes4 selector, bool isSelector, uint, address) {
         // Кодируем селектор функции с аргументом uint256
         bytes4 _selector = bytes4(keccak256("someFunc(uint256,address)"));
         bytes memory data = abi.encodeWithSelector(_selector, 100, msg.sender);
@@ -125,12 +125,12 @@ contract Encoding {
         // Получаем селектор функции
         selector = this.decodeFuncSelector(data);
         // Проверяем что селектор правильный
-        isSelecor = selector == TestContract.someFunc.selector;
+        isSelector = selector == TestContract.someFunc.selector;
 
         // Получаем аргументы функции
         (uint256 argument1, address argument2) = this.decodeFuncArguments(data);
 
-        return (selector, isSelecor, argument1, argument2);
+        return (selector, isSelector, argument1, argument2);
     }
 
     // Получаем селектор функции
