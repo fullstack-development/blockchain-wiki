@@ -1,9 +1,9 @@
 # DEX
 
 **Авторы:**
-[Найданов Павел](https://github.com/PavelNaydanov) 🕵️‍♂️
-[Ярлыков Роман](https://github.com/rlkvrv) 🧐
-[Куценко Алексей](https://github.com/bimkon144) 👨‍💻
+[Павел Найданов](https://github.com/PavelNaydanov) 🕵️‍♂️
+[Роман Ярлыков](https://github.com/rlkvrv) 🧐
+[Алексей Куценко](https://github.com/bimkon144) 👨‍💻
 
 > В этой статье я расскажу про устройство децентрализованных обменников. Если ты не знаком с понятием "Децентрализация", то рекомендую прочитать [маленькую статью](https://medium.com/@juliomacr/centralized-vs-decentralized-vs-distributed-a-quick-overview-1f3bd17b8468) или [статью побольше](https://medium.com/hackernoon/centralization-vs-decentralization-the-best-and-worst-of-both-worlds-7bfdd628ad09).
 

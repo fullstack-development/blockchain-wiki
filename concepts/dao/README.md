@@ -1,6 +1,6 @@
 # DAO
 
-**Автор:** [Найданов Павел](https://github.com/PavelNaydanov) 🕵️‍♂️
+**Автор:** [Павел Найданов](https://github.com/PavelNaydanov) 🕵️‍♂️
 
 > "A DAO is people." - Adam J. Kerpelman, DAOHaus
 
