@@ -1,9 +1,9 @@
 # Обзор DEX
 
 **Авторы:**
-[Найданов Павел](https://github.com/PavelNaydanov) 🕵️‍♂️
-[Ярлыков Роман](https://github.com/rlkvrv) 🧐
-[Куценко Алексей](https://github.com/bimkon144) 👨‍💻
+[Павел Найданов](https://github.com/PavelNaydanov) 🕵️‍♂️
+[Роман Ярлыков](https://github.com/rlkvrv) 🧐
+[Алексей Куценко](https://github.com/bimkon144) 👨‍💻
 
 ## Uniswap V2
 

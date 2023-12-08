@@ -1,6 +1,6 @@
 # The Compound DeFi Protocol
 
-**Автор:** [Найданов Павел](https://github.com/PavelNaydanov) 🕵️‍♂️
+**Автор:** [Павел Найданов](https://github.com/PavelNaydanov) 🕵️‍♂️
 
 > "Compound interest is the eighth wonder of the world. He who understands it, earns it … he who doesn’t … pays it." — Albert Einstein
 
