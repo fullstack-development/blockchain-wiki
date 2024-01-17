@@ -176,3 +176,4 @@ constructor() {
 8. [ERC-1822: Universal Upgradeable Proxy Standard (UUPS)](https://eips.ethereum.org/EIPS/eip-1822)
 9. [How to create a Beacon Proxy](https://medium.com/coinmonks/how-to-create-a-beacon-proxy-3d55335f7353)
 10. [ERC-1167: Minimal Proxy Contract](https://eips.ethereum.org/EIPS/eip-1167)
+11. [Proxies deep dive](https://proxies.yacademy.dev/pages/proxies-list/#the-proxy)
