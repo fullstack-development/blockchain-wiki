@@ -19,7 +19,7 @@
 - [Concepts](./concepts/README.md)
 - [Cryptography](./cryptography/README.md)
 - [DeFi](./DeFi/README.md)
-- [Ethereum virtual machine](./ehtereum-virtual-machine/README.md)
+- [Ethereum virtual machine](./ethereum-virtual-machine/README.md)
 - [EIPs](./EIPs/README.md)
 - [Solidity](./solidity/README.md)
 - [Tools](./tools/README.md)

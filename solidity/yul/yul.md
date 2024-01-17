@@ -14,7 +14,7 @@
 
 **Байт-код EVM** - это компактное представление низкоуровневых инструкций, которые в дальнейшем интерпретируются виртуальной машиной Ethereum (EVM).
 
-_Примечание!_ Перед изучением Yul рекомендуется разобраться как работают [битовые операции](https://github.com/fullstack-development/blockchain-wiki/blob/main/solidity/bitwise-operators/bitwise-operators.md), как устроена стековая машина [EVM](https://github.com/fullstack-development/blockchain-wiki/blob/main/ehtereum-virtual-machine/README.md), как работают [опкоды](https://github.com/fullstack-development/blockchain-wiki/blob/main/ehtereum-virtual-machine/evm-opcodes/README.md) и как устроена кодировка [abi](https://github.com/fullstack-development/blockchain-wiki/blob/main/solidity/ABI/readme.md). Также в изучении очень поможет понимание устройства различных видов памяти в EVM (storage, memory, calldata) и какие есть особенности при работе с ними.
+_Примечание!_ Перед изучением Yul рекомендуется разобраться как работают [битовые операции](https://github.com/fullstack-development/blockchain-wiki/blob/main/solidity/bitwise-operators/bitwise-operators.md), как устроена стековая машина [EVM](https://github.com/fullstack-development/blockchain-wiki/blob/main/ethereum-virtual-machine/README.md), как работают [опкоды](https://github.com/fullstack-development/blockchain-wiki/blob/main/ethereum-virtual-machine/evm-opcodes/README.md) и как устроена кодировка [abi](https://github.com/fullstack-development/blockchain-wiki/blob/main/solidity/ABI/readme.md). Также в изучении очень поможет понимание устройства различных видов памяти в EVM (storage, memory, calldata) и какие есть особенности при работе с ними.
 
 ### Для чего нужен Yul
 
