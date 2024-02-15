@@ -132,6 +132,7 @@
   - <details>
       <summary>Tools</summary>
 
+      - [Automation contracts](./tools/contract-automation/README.md)
       - [Brownie](./tools/brownie/README.md)
       - [Tenderly](./tools/tenderly/README.md)
       - [The graph](./tools/thegraph/README.md)
