@@ -132,8 +132,8 @@
       <summary>Tools</summary>
 
       - [Brownie](./tools/brownie/README.md)
-      - [Subgraph](./tools/subgraph/README.md)
       - [Tenderly](./tools/tenderly/README.md)
+      - [The graph](./tools/thegraph/README.md)
     </details>
 </details>
 
