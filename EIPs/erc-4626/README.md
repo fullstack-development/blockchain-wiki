@@ -175,7 +175,7 @@ function withdraw(
 
 Самые популярные библиотеки уже реализовали минимальный функционал для контракта vault. Можно брать контракты, наследоваться от них и дорабатывать свой собственный контракт **vault**.
 
-1. [Минимальная реализация](https://github.com/transmissions11/solmate/blob/main/src/mixins/ERC4626.sol) vault в библиотеке solmate.
+1. [Минимальная реализация](https://github.com/transmissions11/solmate/blob/main/src/tokens/ERC4626.sol) vault в библиотеке solmate.
 2. [Минимальная реализация](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v5.0.0/contracts/token/ERC20/extensions/ERC4626.sol) vault в библиотеке openZeppelin.
 
 _Важно!_ Стандарт полностью обратно совместим со стандартом ERC-20.
