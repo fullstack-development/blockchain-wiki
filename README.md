@@ -136,6 +136,7 @@
       - [Brownie](./tools/brownie/README.md)
       - [Tenderly](./tools/tenderly/README.md)
       - [The graph](./tools/thegraph/README.md)
+      - [Thirdweb](./tools/thirdweb/README.md)
     </details>
 </details>
 
