@@ -114,7 +114,7 @@
   - <details>
       <summary>EIPs</summary>
 
-      - [EIP-140: REVERT instruction](./EIPs/erc-140)
+      - [EIP-140: REVERT instruction](./EIPs/erc-140/README.md)
       - [ERC-165: Standard Interface Detection](./EIPs/erc-165/README.md)
       - [ERC-1363: Payable Token(transferAndCall)](./EIPs/erc-1363/README.md)
       - [ERC-4337: Account Abstraction Using Alt Mempool](./EIPs/erc-4337/README.md)
