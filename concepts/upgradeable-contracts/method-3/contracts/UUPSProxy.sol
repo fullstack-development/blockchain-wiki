@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.17;
+pragma solidity ^0.8.21;
 
-import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
-import "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
-import "@openzeppelin/contracts/proxy/utils/UUPSUpgradeable.sol";
+import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import {ERC1967Proxy} from "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
+import {UUPSUpgradeable} from "@openzeppelin/contracts/proxy/utils/UUPSUpgradeable.sol";
 
 /// Контракт логики
 contract Logic is UUPSUpgradeable, OwnableUpgradeable {
@@ -11,12 +11,12 @@ contract Logic is UUPSUpgradeable, OwnableUpgradeable {
 
     /**
      * @dev Так как в обновляемых контрактах нет конструктора, то нам необходимо использовать функцию initialize()
-     * Дополнительно необходимо инициализировать контракт Ownable, так как он тоже обновляемый
-     * Тот кто вызовет initialize() станет владельцем контракта Logic и сможет обновлять имплементацию для прокси
+     * Дополнительно необходимо инициализировать контракт OwnableUpgradeable, так как он тоже обновляемый
+     * Адрес _initialOwner станет владельцем контракта Logic и сможет обновлять имплементацию для прокси
      */
-    function initialize() external initializer {
-       __Ownable_init();
-   }
+    function initialize(address _initialOwner) external initializer {
+       __Ownable_init(_initialOwner);
+    }
 
     function store(uint256 _newValue) public {
         _value = _newValue;

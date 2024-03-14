@@ -1,23 +1,25 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.17;
+pragma solidity ^0.8.21;
 
 import {TransparentUpgradeableProxy} from "@openzeppelin/contracts/proxy/transparent/TransparentUpgradeableProxy.sol";
+import {ERC1967Utils} from "@openzeppelin/contracts/proxy/ERC1967/ERC1967Utils.sol";
 import {ProxyAdmin} from "@openzeppelin/contracts/proxy/transparent/ProxyAdmin.sol";
-import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
+import {Initializable} from "@openzeppelin/contracts/proxy/utils/Initializable.sol";
 
 /**
  * Чтобы понять контракты. Лучше всего задеплоить их при помощи Remix.
  * Порядок деплоя:
  *      1. Задеплоить контрат Logic. Попробовать вызвать initialize() на задеплоенном контракте.
  *         Наша защита не позволит этого сделать
- *      2. Задеплоить контракт Admin
- *      3. Задеплоить контракт LogicProxy(address Logic, address Admin, 0x)
- *      4. Задеплоить контракт LogicProxy с ABI контракта Logic при помощи встроенного в ремикс функционала "Deploy at address"
- *         Это позволит вызывать методы контракта Logic для контракта LogicProxy
- *      5. Вызвать функцию initialize() на последнем задеплоенном контракте LogicProxy(задеплоен с ABI контракта Logic)
+ *      2. Задеплоить контракт LogicProxy(address Logic, address InitialOwner, 0x)
+ *      3. Связать ABI контракта Logic с LogicProxy при помощи встроенного в Remix функционала "Deploy at address".
+ *         Чтобы сделать это необходимо выбрать в поле CONTRACT - Logic, а в "At Address" установить адрес LogicProxy. Нажать на кнопку "At address"
+ *          Это позволит вызывать методы контракта Logic для контракта LogicProxy
+ *      4. Вызвать функцию initialize() на контракте Logic (из пункта 3, этот контракт позволяет прокси вызывать методы Logic)
  *         Убедиться, что транзакция прошла успешно. Вызвать функцию initialize() повторно. Убедиться что транзакция вернулась с ошибкой
  *
- * Для обновления имплементации вызывать метод upgrade() на контракте Admin
+ * Для обновления имплементации вызывать метод upgradeAndCall() на контракте ProxyAdmin
+ * (адрес админа можно получить на LogicProxy вызвав getAdmin(), затем связать его с ABI ProxyAdmin как в пункте 3)
  */
 
 /// Контракт логики
@@ -55,14 +57,15 @@ contract Logic is Initializable {
 
 /// Контракт прокси
 contract LogicProxy is TransparentUpgradeableProxy {
-    constructor(address _logic, address admin_, bytes memory _data)
-        TransparentUpgradeableProxy(_logic, admin_, _data)
+    constructor(address _logic, address _initialOwner, bytes memory _data)
+        TransparentUpgradeableProxy(_logic, _initialOwner, _data)
     {}
-}
 
-/**
- * @notice Контракт прокси админа
- * @dev Только прокси админ может обновлять контракт логики для прокси.
- * Поэтому технически необходимо вызывать метод upgrade() у контракта админа
- */
-contract Admin is ProxyAdmin {}
+    function getAdmin() external view returns (address) {
+        return ERC1967Utils.getAdmin();
+    }
+
+    function getImplementation() external view returns (address) {
+        return ERC1967Utils.getImplementation();
+    }
+}

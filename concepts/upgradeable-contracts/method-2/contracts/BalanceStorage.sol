@@ -20,7 +20,7 @@ contract BalanceStorage is Ownable {
 
     error OnlyLogic(address sender);
 
-    constructor(address logic) {
+    constructor(address logic) Ownable(msg.sender) {
         _logic = logic;
     }
 
