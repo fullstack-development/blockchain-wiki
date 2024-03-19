@@ -43,7 +43,9 @@ contract LogicProxy is ERC1967Proxy {
     ) ERC1967Proxy(_logic, _data) {}
 
     /// @notice Возвращает адрес установленного контракта логики для прокси
-    function getImplemetation() public view returns (address) {
+    function getImplementation() public view returns (address) {
         return _implementation();
     }
+
+    receive() external payable {}
 }

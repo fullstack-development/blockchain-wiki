@@ -8,13 +8,13 @@ import {ProxyAdmin} from "@openzeppelin/contracts/proxy/transparent/ProxyAdmin.s
 /**
  * Чтобы понять контракты. Лучше всего задеплоить их при помощи Remix.
  * Порядок деплоя:
- *      1. Задеплоить контрат Logic
+ *      1. Задеплоить контракт Logic
  *      2. Задеплоить контракт LogicProxy(address Logic, address InitialOwner, 0x)
  *      3. Связать ABI контракта Logic с LogicProxy при помощи встроенного в Remix функционала "Deploy at address".
  *         Чтобы сделать это необходимо выбрать в поле CONTRACT - Logic, а в "At Address" установить адрес LogicProxy. Нажать на кнопку "At address"
  *          Это позволит вызывать методы контракта Logic для контракта LogicProxy
  *      4. Задеплоить контракт Logic2. Этот контракт обновит логику контракта Logic. Будет добавлена новая функция increment()
-        5. Вызвать на контракте LogicProxy функцию "getAdmin()" чтобы получить адрес контракта администратора, затем связать ABI ProxyAdmin 
+        5. Вызвать на контракте LogicProxy функцию "getAdmin()" чтобы получить адрес контракта администратора, затем связать ABI ProxyAdmin
             с этим адресом, как это было проделано в пункте 3
  *      6. На контракте ProxyAdmin вызвать upgradeAndCall(address LogicProxy, address Logic2, 0x) и передать туда адреса LogicProxy, Logic2 и data (можно нулевую 0x)
  *      7. Повторить пункт 3 но уже для контракта Logic2. Теперь у нас появился дополнительный метод increment().
@@ -64,4 +64,6 @@ contract LogicProxy is TransparentUpgradeableProxy {
     function getImplementation() external view returns (address) {
         return ERC1967Utils.getImplementation();
     }
+
+    receive() external payable {}
 }

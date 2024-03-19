@@ -5,6 +5,7 @@ import "@openzeppelin/contracts/proxy/beacon/UpgradeableBeacon.sol";
 import "@openzeppelin/contracts/proxy/beacon/BeaconProxy.sol";
 
 /**
+ * Чтобы понять контракты. Лучше всего задеплоить их при помощи Remix.
  * Порядок деплоя для тестирования в remix:
  *      1. Деплой контракта Logic
  *      2. Деплой контракта Beacon(address Logic, address Owner)
@@ -12,7 +13,7 @@ import "@openzeppelin/contracts/proxy/beacon/BeaconProxy.sol";
  *      4. Деплой контракта LogicProxy2(address Beacon, 0x)
  *      5. Деплой нового контракта Logic2
  *      6. Вызов upgradeTo(address Logic2) на контракте Beacon
- *      7. Вызов функции getImplemetation() на каждом контракте LogicProxy для проверки смены контракта логики
+ *      7. Вызов функции getImplementation() на каждом контракте LogicProxy для проверки смены контракта логики
  */
 
 /// Контракт логики
@@ -61,14 +62,16 @@ contract LogicProxy is BeaconProxy {
     }
 
     /// @notice Возвращает адрес установленного контракта логики для прокси
-    function getImplemetation() public view returns (address) {
+    function getImplementation() public view returns (address) {
         return _implementation();
     }
 
     /// @notice Возвращает описание прокси
-    function getProxyDescription() external view returns (string memory) {
+    function getProxyDescription() external pure returns (string memory) {
         return "First proxy";
     }
+
+    receive() external payable {}
 }
 
 /// Контракт Second прокси
@@ -81,12 +84,14 @@ contract LogicProxy2 is BeaconProxy {
     }
 
     /// @notice Возвращает адрес установленного контракта логики для прокси
-    function getImplemetation() public view returns (address) {
+    function getImplementation() public view returns (address) {
         return _implementation();
     }
 
     /// @notice Возвращает описание прокси
-    function getProxyDescription() external view returns (string memory) {
+    function getProxyDescription() external pure returns (string memory) {
         return "Second proxy";
     }
+
+    receive() external payable {}
 }

@@ -9,7 +9,7 @@ import {Initializable} from "@openzeppelin/contracts/proxy/utils/Initializable.s
 /**
  * Чтобы понять контракты. Лучше всего задеплоить их при помощи Remix.
  * Порядок деплоя:
- *      1. Задеплоить контрат Logic. Попробовать вызвать initialize() на задеплоенном контракте.
+ *      1. Задеплоить контракт Logic. Попробовать вызвать initialize() на задеплоенном контракте.
  *         Наша защита не позволит этого сделать
  *      2. Задеплоить контракт LogicProxy(address Logic, address InitialOwner, 0x)
  *      3. Связать ABI контракта Logic с LogicProxy при помощи встроенного в Remix функционала "Deploy at address".
@@ -17,9 +17,6 @@ import {Initializable} from "@openzeppelin/contracts/proxy/utils/Initializable.s
  *          Это позволит вызывать методы контракта Logic для контракта LogicProxy
  *      4. Вызвать функцию initialize() на контракте Logic (из пункта 3, этот контракт позволяет прокси вызывать методы Logic)
  *         Убедиться, что транзакция прошла успешно. Вызвать функцию initialize() повторно. Убедиться что транзакция вернулась с ошибкой
- *
- * Для обновления имплементации вызывать метод upgradeAndCall() на контракте ProxyAdmin
- * (адрес админа можно получить на LogicProxy вызвав getAdmin(), затем связать его с ABI ProxyAdmin как в пункте 3)
  */
 
 /// Контракт логики
@@ -68,4 +65,6 @@ contract LogicProxy is TransparentUpgradeableProxy {
     function getImplementation() external view returns (address) {
         return ERC1967Utils.getImplementation();
     }
+
+    receive() external payable {}
 }

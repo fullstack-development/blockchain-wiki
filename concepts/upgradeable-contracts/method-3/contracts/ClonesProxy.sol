@@ -6,9 +6,10 @@ import "@openzeppelin/contracts/proxy/Clones.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 /**
+ * Чтобы понять контракты. Лучше всего задеплоить их при помощи Remix.
  * Порядок деплоя:
- * 1. Деплоем контракт Pair
- * 2. Деплоем контракт Factory(address Pair)
+ * 1. Деплой контракта Pair
+ * 2. Деплой контракта Factory(address Pair)
  * 3. Вызываем метод createPair на контракте Factory. Адреса токенов можно отправить любые
  * 4. Убедиться, что новый инстанс(клон) контракта Pair успешно создан
  */
