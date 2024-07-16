@@ -90,13 +90,14 @@
           <summary>Lending</summary>
 
           - [Overview](./DeFi/lending/README.md)
-          - [Compound](./DeFi/lending/compound/README.md)
-          - [Aave](./DeFi/lending/aave/README.md)
-          - [Flash loans](./DeFi/lending/aave/flash-loans/README.md)
+          - [Compound v2](./protocols/compound-v2/README.md)
+          - [Aave v2](./protocols/aave-v2/README.md)
+          - [Flash loans](./protocols/aave-v2/flash-loans/README.md)
         </details>
       - [Margin trading](./DeFi/margin-trading/README.md)
       - [Stablecoin](./DeFi/stablecoin/README.md)
       - [Vesting](./DeFi/vesting/README.md)
+      - [Protocols](./DeFi/protocols/README.md)
     </details>
   - <details>
       <summary>Ethereum virtual machine</summary>
@@ -127,6 +128,7 @@
 
       - [Aave v2](./protocols/aave-v2/README.md)
       - [Compound v2](./protocols/compound-v2/README.md)
+      - [Uniswap X](./protocols/UniswapX/README.md)
     </details>
   - <details>
       <summary>Solidity</summary>
