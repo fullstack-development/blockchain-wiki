@@ -124,10 +124,12 @@
       - [ERC-4626: Tokenized Vaults](./EIPs/erc-4626/README.md)
       - [ERC-6372: Contract clock](./EIPs/erc-6372/README.md)
     </details>
+
   - <details>
       <summary>Protocols</summary>
 
       - [Aave v2](./protocols/aave-v2/README.md)
+      - [Aragon DAO v1](./protocols/aragon-dao-v1/README.md)
       - [Compound v2](./protocols/compound-v2/README.md)
       - [Uniswap X](./protocols/UniswapX/README.md)
     </details>
