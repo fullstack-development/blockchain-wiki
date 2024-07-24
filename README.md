@@ -123,6 +123,12 @@
       - [ERC-6372: Contract clock](./EIPs/erc-6372/README.md)
     </details>
   - <details>
+      <summary>Protocols</summary>
+
+      - [Aave v2](./protocols/aave-v2/README.md)
+      - [Compound v2](./protocols/compound-v2/README.md)
+    </details>
+  - <details>
       <summary>Solidity</summary>
 
       - [ABI](./solidity/ABI/readme.md).
