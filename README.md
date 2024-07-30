@@ -98,7 +98,6 @@
       - [Margin trading](./DeFi/margin-trading/README.md)
       - [Stablecoin](./DeFi/stablecoin/README.md)
       - [Vesting](./DeFi/vesting/README.md)
-      - [Protocols](./DeFi/protocols/README.md)
     </details>
   - <details>
       <summary>Ethereum virtual machine</summary>
@@ -135,6 +134,7 @@
 
       - [Aave v2](./protocols/aave-v2/README.md)
       - [Aragon DAO v1](./protocols/aragon-dao-v1/README.md)
+      - [Aragon DAO v2](./protocols/aragon-dao-v2/README.md)
       - [Compound v2](./protocols/compound-v2/README.md)
       - [Compound v3](./protocols/compound-v3/README.md)
       - [Uma. Optimistic oracle](./protocols/uma/README.md)
