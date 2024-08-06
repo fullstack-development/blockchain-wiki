@@ -128,6 +128,7 @@
 
       - [Aave v2](./protocols/aave-v2/README.md)
       - [Compound v2](./protocols/compound-v2/README.md)
+      - [Compound v3](./protocols/compound-v3/README.md)
       - [Uniswap X](./protocols/UniswapX/README.md)
     </details>
   - <details>
