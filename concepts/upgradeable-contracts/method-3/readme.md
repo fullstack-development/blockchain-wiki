@@ -183,3 +183,5 @@ constructor() {
 9. [How to create a Beacon Proxy](https://medium.com/coinmonks/how-to-create-a-beacon-proxy-3d55335f7353)
 10. [ERC-1167: Minimal Proxy Contract](https://eips.ethereum.org/EIPS/eip-1167)
 11. [Proxies deep dive](https://proxies.yacademy.dev/pages/proxies-list/#the-proxy)
+12. [The initializable smart contract design pattern](https://www.rareskills.io/post/initializable-solidity)
+13. [The Beacon Proxy Pattern Explained](https://www.rareskills.io/post/beacon-proxy)
