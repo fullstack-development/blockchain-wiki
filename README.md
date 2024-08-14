@@ -137,6 +137,7 @@
       - [Aragon DAO v1](./protocols/aragon-dao-v1/README.md)
       - [Compound v2](./protocols/compound-v2/README.md)
       - [Compound v3](./protocols/compound-v3/README.md)
+      - [Uma. Optimistic oracle](./protocols/uma/README.md)
       - [Uniswap X](./protocols/UniswapX/README.md)
     </details>
   - <details>
