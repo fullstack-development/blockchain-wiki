@@ -1,0 +1,24 @@
+{
+    "name": "simple-evm-bridges",
+    "scripts": {
+        "deploy:orig": "npx hardhat ignition deploy ignition/modules/OriginToken.js --network sepolia",
+        "deploy:dest": "npx hardhat ignition deploy ignition/modules/DestinationToken.js --network polygonAmoy",
+        "deploy:origBridge": "npx hardhat ignition deploy ignition/modules/OriginTokenBridge.js --network sepolia --parameters ignition/parameters.json",
+        "deploy:destBridge": "npx hardhat ignition deploy ignition/modules/DestinationTokenBridge.js --network polygonAmoy --parameters ignition/parameters.json",
+        "mint:originTokens": "node scripts/mintOriginTokens.js",
+        "watcher": "node scripts/bridgeWatcher.js",
+        "send-to-dest": "node scripts/sendTokensToDestination.js",
+        "send-to-orig": "node scripts/sendTokensToOrigin.js",
+        "ccip-send-to-dest": "node scripts/ccip/sendTokensToDestinationCCIP.js",
+        "ccip-send-to-orig": "node scripts/ccip/sendTokensToOriginCCIP.js"
+    },
+    "devDependencies": {
+        "@chainlink/contracts": "^1.2.0",
+        "@chainlink/contracts-ccip": "^1.4.0",
+        "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+        "@openzeppelin/contracts": "^5.0.2",
+        "dotenv": "^16.4.5",
+        "ethers": "^6.13.2",
+        "hardhat": "^2.22.9"
+    }
+}

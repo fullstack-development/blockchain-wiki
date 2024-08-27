@@ -40,6 +40,7 @@
       <summary>Concepts</summary>
 
       - [Auctions](./concepts/auctions/README.md)
+      - [Bridges](./concepts/bridges/README.md)
       - [Commitment scheme](./concepts/commitment-scheme/README.md)
       - [Gnosis conditional token framework](./concepts/conditional-token-framework/README.md)
       - <details>
