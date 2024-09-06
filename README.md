@@ -140,6 +140,7 @@
       - [Compound v2](./protocols/compound-v2/README.md)
       - [Compound v3](./protocols/compound-v3/README.md)
       - [Polymarket](./protocols/polymarket/README.md)
+      - [LayerZero v2](./protocols/layerzero-v2/README.md)
       - [Uma. Optimistic oracle](./protocols/uma/README.md)
       - [Uniswap X](./protocols/UniswapX/README.md)
     </details>
