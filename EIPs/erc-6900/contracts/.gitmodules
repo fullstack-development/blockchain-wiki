@@ -1,0 +1,15 @@
+[submodule "lib/forge-std"]
+	path = lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "lib/account-abstraction"]
+	path = lib/account-abstraction
+	url = https://github.com/eth-infinitism/account-abstraction
+[submodule "lib/openzeppelin-contracts"]
+	path = lib/openzeppelin-contracts
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts
+[submodule "lib/modular-account-libs"]
+	path = lib/modular-account-libs
+	url = https://github.com/erc6900/modular-account-libs
+[submodule "lib/modular-account"]
+	path = lib/modular-account
+	url = https://github.com/alchemyplatform/modular-account

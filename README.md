@@ -129,6 +129,7 @@
       - [ERC-4337: Account Abstraction Using Alt Mempool](./EIPs/erc-4337/README.md)
       - [ERC-4626: Tokenized Vaults](./EIPs/erc-4626/README.md)
       - [ERC-6372: Contract clock](./EIPs/erc-6372/README.md)
+      - [ERC-6900: Modular Smart Contract Accounts and Plugins](./EIPs/erc-6900/README.md)
     </details>
 
   - <details>
