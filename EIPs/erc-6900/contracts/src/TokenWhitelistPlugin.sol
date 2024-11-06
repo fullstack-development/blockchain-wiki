@@ -67,13 +67,11 @@ contract TokenWhitelistPlugin is ITokenWhitelistPlugin, BasePlugin {
             (address token,, bytes memory innerCalldata) = abi.decode(data[4:], (address, uint256, bytes));
 
             bytes4 selector;
-            uint256 spend;
             assembly {
                 selector := mload(add(innerCalldata, 32)) // 0:32 is arr len, 32:36 is selector
-                spend := mload(add(innerCalldata, 68)) // 36:68 is recipient, 68:100 is spend
             }
 
-            if (selector == ERC20.transfer.selector || selector == ERC20.transferFrom.selector) {
+            if (selector == ERC20.transfer.selector || selector == ERC20.approve.selector) {
                 _isWhitelistedToken(msg.sender, token);
             }
         } else if (functionId == uint8(FunctionId.EXECUTE_BATCH_FUNCTION)) {
@@ -89,7 +87,7 @@ contract TokenWhitelistPlugin is ITokenWhitelistPlugin, BasePlugin {
                     selector := mload(add(internalData, 32))
                 }
 
-                if (selector == ERC20.transfer.selector || selector == ERC20.transferFrom.selector) {
+                if (selector == ERC20.transfer.selector || selector == ERC20.approve.selector) {
                     _isWhitelistedToken(msg.sender, calls[i].target);
                 }
             }
