@@ -1,0 +1,19 @@
+{
+    "name": "erc-7579-modules",
+    "version": "0.0.1",
+    "dependencies": {
+        "@rhinestone/core-modules": "github:rhinestonewtf/core-modules",
+        "@rhinestone/modulekit": "^0.4.13"
+    },
+    "files": [
+        "src",
+        "test",
+        "script",
+        "package.json",
+        "foundry.toml",
+        "remappings.txt"
+    ],
+    "publishConfig": {
+        "access": "public"
+    }
+}

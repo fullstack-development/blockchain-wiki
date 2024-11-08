@@ -130,6 +130,7 @@
       - [ERC-4626: Tokenized Vaults](./EIPs/erc-4626/README.md)
       - [ERC-6372: Contract clock](./EIPs/erc-6372/README.md)
       - [ERC-6900: Modular Smart Contract Accounts and Plugins](./EIPs/erc-6900/README.md)
+      - [ERC-7579: Minimal Modular Smart Accounts](./EIPs/erc-7579/README.md)
     </details>
 
   - <details>
