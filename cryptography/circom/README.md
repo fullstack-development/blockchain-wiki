@@ -1,4 +1,4 @@
-# Обзор circom
+# Circom и SnarkJS: Практическое Руководство по Созданию Zero-Knowledge Proofs
 
 **Автор:** [Алексей Куценко](https://github.com/bimkon144) 👨‍💻
 
