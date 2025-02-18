@@ -183,7 +183,39 @@ npx create-lz-oapp@latest
 
 После выбора пакетного менеджера мы получим готовый проект с OFT-токеном, останется только поменять нейминг, задеплоить контракты и настроить их взаимодействие в разных сетях.
 
+Например вот так будет выглядеть самый базовый ERC20 OFT-токен:
 
+```solidity
+// SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.22;
+
+import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
+import { OFT } from "@layerzerolabs/oft-evm/contracts/OFT.sol";
+
+contract MetaLampOFTv1 is OFT {
+    constructor(
+        string memory _name,
+        string memory _symbol,
+        address _lzEndpoint,
+        address _delegate
+    ) OFT(_name, _symbol, _lzEndpoint, _delegate) Ownable(_delegate) {}
+}
+```
+
+Напомню, что это для случая, когда токен нужно создать с нуля. Здесь видно что `name` и `symbol` мы передаем во время деплоя, потому что для каждой новой сети будет необходим новый деплой токена или приложения OApp.
+
+С параметром `_lzEndpoint` мы уже знакомы. Приставка `lz` здесь и далее означает LayerZero.
+
+Адрес `_delegate` - это адрес который во-первых будет владельцем токена, а во вторых будет отвечать за смену настроек для этого OApp.
+
+#### Структура OFT-токена
+
+OFT-токен (на схеме это MetaLampOFTv1) имеет довольно простую структуру, которую можно увидеть на схеме ниже.
+
+![oapp-inherits](./img/oapp-inherits.png)  
+*Схема наследований OFT-токена*
+
+// TODO описать основные контракты OFT
 
 ### Как задеплоить и настроить
 
