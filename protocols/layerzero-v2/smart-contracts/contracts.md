@@ -224,6 +224,7 @@ npx create-lz-oapp@latest
 ![oapp-inherits](./img/oapp-inherits.png)  
 *Схема наследований OFT-токена*
 
+// TODO добавить ссылки на репозиторий (типа этой [OFTCore](https://github.com/LayerZero-Labs/devtools/blob/main/packages/oft-evm/contracts/OFTCore.sol))
 Здесь можно также увидеть два дополнительных смарт-контракта (`OAppPreCrimeSimulator` и `OAppOptionsType3`), о которых мы поговорим чуть позже. Также видно, что `OApp` наследуется от `OAppCore` и может выполнять как отправку сообщений, так и их получение (`OAppSender`, `OAppReceiver`). 
 
 *Примечание:* Не все захотят разворачивать проект, поэтому код можно посмотреть [тут](./contracts/contracts/MetaLampOFTv1.sol), нужно установить зависимости через `pnpm install` в папке `protocols/layerzero-v2/smart-contracts/contracts`. Либо сходить в репозиторий [LayerZero-Labs/devtools](https://github.com/LayerZero-Labs/devtools/blob/main/packages/oft-evm/contracts).
@@ -306,11 +307,14 @@ struct MessagingReceipt {
 
 ##### Local Decimals и Shared Decimals
 
-Теперь по порядку можно разобрать отдельные аспекты отправки и начать лучше всего со служебных функций `_debitView` и `_removeDust`, а также таких понятий, как Local Decimals (LD) и Shared Decimals (SD).
+Теперь по порядку можно разобрать отдельные аспекты отправки и начать лучше всего со служебных функций `_debitView` и `_removeDust`, а также таких понятий, как Local Decimals (LD) и Shared Decimals (SD). То есть разберем что происходит в ветке 1.
+
+![oft-core-send-branch-1](./img/oft-core-send-branch-1.png)   
+*Сжигание токенов и доп. расчеты для корректного отображения amount.*
 
 Здесь все просто. Для того чтобы обеспечить максимальную совместимость между различными блокчейнами (не только EVM-совместимыми) и при этом не потерять в точности - для передачи токенов был выделен `unit64` и decimals 6.
 
-Это значит, что максимальный totalSupply может быть равен 18,446,744,073,709.551615. Функцию `OFTCore::sharedDecimals` можно переопределить в меньшую сторону если нужен больший totalSupply, тогда максимальное число вырастет до 1,844,674,407,370,955.1615, но при этом после запятой останется только 4 знака.
+Это значит, что максимальный totalSupply может быть равен 18,446,744,073,709.551615. Функцию `OFTCore::sharedDecimals` можно переопределить в меньшую сторону если нужен больший totalSupply, тогда максимальное число вырастет до 1,844,674,407,370,955.1615, но при этом после запятой останется только 4 знака. Увеличивать decimals в большую сторону протокол не рекомендует, они проверили и такой точности должно быть достаточно для всех существующих блокчейнов.
 
 Как это работает? Есть две составляющие:
 1. Удаление "пыли" (чтобы можно было точно знать сколько токенов будет отправлено);
@@ -354,6 +358,96 @@ function _toLD(uint64 _amountSD) internal view virtual returns (uint256 amountLD
 Можете для примера взять ETH по текущим ценам и посчитать какие могут быть потери из-за такой точности. Я посчитал и это действительно "пыль".
 
 Что касается функции `_debitView`, помимо вызова `_removeDust` в нее также заложена проверка на "проскальзывание".
+
+Таким образом мы полностью разобрали ветку 1. С `ERC20::_burn` думаю все и так понятно.
+
+##### Формирование сообщения и опций
+
+Следующая на очереди функция `_buildMsgAndOptions`, ее тоже логически можно разделить на 3 блока:
+1. Кодировка сообщения.
+2. Формирование опций.
+3. Проверка через инспектор (опционально).
+
+![oft-core-send-branch-2](./img/oft-core-send-branch-2.png)  
+*Формирование сообщения и опций для отправки сообщения*
+
+**Шаг 1:** Кодировка сообщения выполняется с помощью библиотеки [OFTMsgCodec](https://github.com/LayerZero-Labs/devtools/blob/main/packages/oft-evm/contracts/libs/OFTMsgCodec.sol), содержимое которой вы можете посмотреть сами - ее главная задача правильно скомпоновать байты информации для передачи.
+
+```solidity
+function _buildMsgAndOptions(
+    SendParam calldata _sendParam, // Параметры отправки (рассмотрены выше)
+    uint256 _amountLD // Количество токенов с local decimals
+) internal view virtual returns (bytes memory message, bytes memory options) {
+    // 1. Кодировка сообщения
+    bool hasCompose;
+    (message, hasCompose) = OFTMsgCodec.encode(
+        _sendParam.to,
+        _toSD(_amountLD),
+        _sendParam.composeMsg
+    );
+
+    // 2. Формирование опций
+    uint16 msgType = hasCompose ? SEND_AND_CALL : SEND;
+    options = combineOptions(_sendParam.dstEid, msgType, _sendParam.extraOptions);
+
+    // 3. Опциональная проверка через инспектор
+    address inspector = msgInspector;
+    if (inspector != address(0)) IOAppMsgInspector(inspector).inspect(message, options);
+}
+```
+
+**Шаг 2:** С опциями интереснее. Из чего состоят опции мы рассмотрим чуть позже. Здесь важно другое - какие типы опций существуют и как они объединяются функцией [combineOptions](https://github.com/LayerZero-Labs/devtools/blob/05443835db976b7a528b883b19ddf02cb7f36d89/packages/oapp-evm/contracts/oapp/libs/OAppOptionsType3.sol#L63).
+
+По умолчанию есть 3 **типа** опций:
+- 1 - SEND - простоя отправка сообщения (помним, что в сообщении может быть и передача токенов);
+- 2 - SEND_AND_CALL - используется для compose сообщений (с передачей сообщения и последующим вызовом).
+- 3 - OPTION_TYPE_3 - этот тип для того, чтобы правильно объединять опции типа 1, 2 и принудительные опции.
+
+*Важно!* Принудительные опции (enforcedOptions) - это опции, которые можно задать через функцию `OAppOptionsType3::setEnforcedOptions`. Данные контракт-расширение позволяет задавать принудительный опции только для **типа 3** (как раз это проверяет функция `_assertOptionsType3`).
+
+Задаются `enforcedOptions` овнером OApp, но что это значит? Объясню на примере. Допустим вы хотите отправить сообщение в другой блокчейн, как мы делали это в Remix, если вы вернетесь к контракту `SourceOApp` в нем заданы такие дефолтные опции:
+
+```solidity
+bytes _options = OptionsBuilder.newOptions().addExecutorLzReceiveOption(50000, 0);
+```
+
+Это значит что мы задаем: `{ gasLimit: 50000, value: 0 }`. Для функции `combineOptions` такие опции будут `_extraOptions`.
+
+При этом, может возникнуть ситуация, когда вы точно знаете, что в конкретном блокчейне необходимо x2 количества газа для выполнения операции плюс нужно дополнительно оплатить комиссию в нативном токене, поэтому вы задаете `enforcedOptions`, например `{ gasLimit: 100000, value: 0.5 ETH }`. В этом случае результирующие опции будут такие: `{ gasLimit: 150000, value 0.5 ETH }`, потому что опции объединятся.
+
+Это также значит, что в случае с наличием `enforcedOptions` вы можете не задавать `extraOptions`.
+
+```solidity
+function combineOptions(
+    uint32 _eid,
+    uint16 _msgType,
+    bytes calldata _extraOptions
+) public view virtual returns (bytes memory) {
+    bytes memory enforced = enforcedOptions[_eid][_msgType];
+    // Если enforced не заданы, возвращаем те, что переданы с сообщением
+    if (enforced.length == 0) return _extraOptions;
+
+    // Если enforced заданы, но с сообщением ничего не передано - возвращаем enforced
+    if (_extraOptions.length == 0) return enforced;
+
+    // Если заданы и enforced и extraOptions, то extraOptions должны быть валидными
+    // то есть как минимум должны содержать информацию о типе опций
+    // для того, чтобы их можно было корректно объединить с enforced
+    if (_extraOptions.length >= 2) {
+        _assertOptionsType3(_extraOptions);
+        return bytes.concat(enforced, _extraOptions[2:]);
+    }
+    // Выкинуть ошибку в случае если переданы невалидные extraOptions
+    revert InvalidOptions(_extraOptions);
+}
+```
+
+На схеме это будет выглядеть так:
+
+![combine-options](./img/combine-options.png)  
+*Схема выбора опций или их объединения*
+
+**Шаг 3 (опциональный):** Если вы задали адрес контракта `msgInspector`, ему будут переданы на проверку параметры `message` и `options`. Это возможность выполнить дополнительную принудительную проверку перед отправкой сообщения. Также задается для конкретного OApp в конкретном блокчейне.
 
 ### Как задеплоить и настроить
 
