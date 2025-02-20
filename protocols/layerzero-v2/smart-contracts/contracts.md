@@ -23,6 +23,8 @@
    -  Работа с нативными токенами
    -  Кодеки
    -  Refund address
+- ?? Solidity API
+- ?? lzRead
 -  Заключение
 -  Ссылки
 
@@ -473,6 +475,54 @@ function combineOptions(
 
 ### Получение сообщения в сети назначения
 
+Получение сообщения будет выполнено через базовую функцию [OAppReceiver::lzReceive](https://github.com/LayerZero-Labs/devtools/blob/05443835db976b7a528b883b19ddf02cb7f36d89/packages/oapp-evm/contracts/oapp/OAppReceiver.sol#L95) - это стандартная точка входа для всех входящих сообщений, которая выполняет базовые проверки перед тем как вызвать `OAppReceiver::_lzReceive`, которая переопределена с учетом нашей логики в [OFTCore](https://github.com/LayerZero-Labs/devtools/blob/05443835db976b7a528b883b19ddf02cb7f36d89/packages/oft-evm/contracts/OFTCore.sol#L266).
+
+Проверки всего две:
+1. Кто вызвал функцию `lzReceive`? Вызывающим (msg.sender) может только Endpoint;
+2. Отправитель сообщения совпадает с тем peer, который мы установили для исходной сети (через `setPeer`). То есть это валидный отправитель.
+
+После этого управление передается `OFTCore::_lzReceive`.
+
+![oft-core-lz-receive](./img/oft-core-lz-receive.png)  
+*Граф вызовов для lzReceive*
+
+Функцию `OFTCore::_lzReceive` не делает ничего сложного. Всего два шага:
+
+- Шаг 1: Вызвать `_credit`, чтобы сминтить токены в сети назначения (либо выполнить другую логику добавленную в токене);
+- Шаг 2: Проверить переданы ли доп. транзакции для выполнения `Endpoint::sendCompose`, если да, добавить их в очередь на выполнение в Endpoint.
+
+```solidity
+function _lzReceive(
+    Origin calldata _origin,
+    bytes32 _guid,
+    bytes calldata _message,
+    address /*_executor*/, // @dev не используется в дефолтной реализации.
+    bytes calldata /*_extraData*/ // @dev не используется в дефолтной реализации.
+) internal virtual override {
+    // Приводим адрес к EVM формату
+    address toAddress = _message.sendTo().bytes32ToAddress();
+
+    // Вызываем OFT::_credit
+    uint256 amountReceivedLD = _credit(toAddress, _toLD(_message.amountSD()), _origin.srcEid);
+
+    // Если есть доп. транзакции, которые нужно выполнить после _credit
+    // добавляем их в очередь Endpoint
+    if (_message.isComposed()) {
+        bytes memory composeMsg = OFTComposeMsgCodec.encode(
+            _origin.nonce,
+            _origin.srcEid,
+            amountReceivedLD,
+            _message.composeMsg()
+        );
+        endpoint.sendCompose(toAddress, _guid, 0 /* the index of the composed message*/, composeMsg);
+    }
+
+    emit OFTReceived(_guid, _origin.srcEid, toAddress, amountReceivedLD);
+}
+```
+
+*Важно!* Для того, чтобы OApp мог работать с `composed` транзакциями, ему необходимо реализовать интерфейс [IOAppComposer](https://github.com/LayerZero-Labs/devtools/blob/05443835db976b7a528b883b19ddf02cb7f36d89/packages/oapp-evm/contracts/oapp/interfaces/IOAppComposer.sol). В базовой реализации эта функция не добавлена.
+
 ### Оценка gasLimit перед отправкой сообщения
 
 ## Как задеплоить и настроить
@@ -495,6 +545,8 @@ function combineOptions(
   - [GitHub: LayerZero v2](https://github.com/LayerZero-Labs/LayerZero-v2)
   - [GitHub: LayerZero-Labs/devtools](https://github.com/LayerZero-Labs/devtools/blob/main/packages/oft-evm/contracts)
   - [Docs: LayerZero v2](https://docs.layerzero.network/v2)
+  - [Docs: Solidity API](https://docs.layerzero.network/v2/developers/evm/technical-reference/api#endpointv2)
+  - [Docs: LayerZero Glossary](https://docs.layerzero.network/v2/home/glossary#lzcompose)
   - [Docs: USDT0](https://docs.usdt0.to/)
   - [Audit: USDT0](https://github.com/Everdawn-Labs/usdt0-audit-reports)
 

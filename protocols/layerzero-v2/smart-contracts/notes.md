@@ -1,4 +1,5 @@
-Протокол LayerZero достаточно масштабный, поэтому верхнеуровневый обзор архитектуры вынесен в отдельную статью. Здесь углубимся в техническую составляющую львиную долю которой представляют смарт-контракты.
+
+lzCompose - нужно подключить [IOAppComposer](https://github.com/LayerZero-Labs/devtools/blob/05443835db976b7a528b883b19ddf02cb7f36d89/packages/oapp-evm/contracts/oapp/interfaces/IOAppComposer.sol)
 
 ## Основные смарт-контракты
 
