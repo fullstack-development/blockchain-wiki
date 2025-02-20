@@ -54,7 +54,7 @@ contract SendTokens is Script {
         return bytes32(uint256(uint160(_addr)));
     }
 
-    function encode(address _sendTo, uint256 _amountShared, bytes memory _composeMsg)
+    function encode(address _sendTo, uint256 _amountLD, bytes memory _composeMsg)
         external
         view
         returns (bytes memory _msg, bool hasCompose)
@@ -63,9 +63,9 @@ contract SendTokens is Script {
         // @dev Remote chains will want to know the composed function caller ie. msg.sender on the src.
         _msg = hasCompose
             ? abi.encodePacked(
-                addressToBytes32(_sendTo), _toSD(_amountShared), addressToBytes32(msg.sender), _composeMsg
+                addressToBytes32(_sendTo), _toSD(_amountLD), addressToBytes32(msg.sender), _composeMsg
             )
-            : abi.encodePacked(addressToBytes32(_sendTo), _toSD(_amountShared));
+            : abi.encodePacked(addressToBytes32(_sendTo), _toSD(_amountLD));
     }
 
     function _toSD(uint256 _amountLD) internal view virtual returns (uint64 amountSD) {

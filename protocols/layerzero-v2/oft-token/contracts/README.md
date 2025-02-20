@@ -643,49 +643,6 @@ forge script scripts/SendTokens.s.sol \
 40267 \
 --broadcast
 
-
-forge script scripts/SendTokens.s.sol \
---via-ir \
---rpc-url sepolia \
---sig "run(address,address,address,uint256,uint32)" \
-0x32bb35Fc246CB3979c4Df996F18366C6c753c29c \
-0xcd5407ae7FA70C6ea1f77eDD7A3dde34BED187F5 \
-0x4cD6778754ba04F069f8D96BCD7B37Ccae6A145d \
-1000000000000000000 \
-40267 \
---broadcast
-```
-
-### Gas profiler lzReceive
-
-```bash
-forge script scripts/GasProfiler.s.sol:GasProfilerScript \
---sig "run_lzReceive(string,address,(uint32,bytes32,uint32,address,bytes[],uint256,uint256))" \
-polygonAmoy \
-0x6EDCE65403992e310A62460808c4b910D972f10f \
-"(40161,0x000000000000000000000000cd5407ae7fa70c6ea1f77edd7a3dde34bed187f5,40267,0x54d412fee228e13a42f38bc760faeffdfe838536,[0x00000000000000000000000032bb35fc246cb3979c4df996f18366c6c753c29c00000000000f4240],0,10)"
-
-[⠊] Compiling...
-[⠃] Compiling 1 files with Solc 0.8.22
-[⠊] Solc 0.8.22 finished in 872.34ms
-Compiler run successful!
-Script ran successfully.
-Gas used: 282858
-
-== Logs ==
-  Starting gas profiling for lzReceive on dstEid: 40267
-  ---------------------------------------------------------
-  Aggregated Gas Metrics Across All Payloads:
-  Overall Average Gas Used: 19051
-  Overall Minimum Gas Used: 19051
-  Overall Maximum Gas Used: 19051
-  Estimated options:
-  0x00030100110100000000000000000000000000004e23
-  ---------------------------------------------------------
-  Finished gas profling for lzReceive on dstEid: 40267
-  ---------------------------------------------------------
-```
-
 ### Create message to send tokens
 
 ```bash
