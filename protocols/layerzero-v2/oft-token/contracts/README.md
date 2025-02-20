@@ -14,8 +14,8 @@
 
 | name          | chain            | eid   | address                                                            | link                                                                                           |
 | ------------- | ---------------- | ----- | ------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------- |
-| MetaLampOFTv1 | Ethereum Sepolia | 40161 | 0x000000000000000000000000040d79fbf17e507c4d41f861a1ff4b2f1d035abe | [etherscan](https://sepolia.etherscan.io/address/0x040D79Fbf17E507C4D41F861A1Ff4B2f1D035ABE)   |
-| MetaLampOFTv1 | Polygon Amoy     | 40267 | 0x0000000000000000000000007412e1e6d127ed74c56ab42eae90076bbbdeed0c | [polygonscan](https://amoy.polygonscan.com/address/0x7412e1E6d127eD74C56Ab42EAe90076BbBdeeD0c) |
+| MetaLampOFTv1 | Ethereum Sepolia | 40161 | 0x000000000000000000000000cd5407ae7FA70C6ea1f77eDD7A3dde34BED187F5 | [etherscan](https://sepolia.etherscan.io/address/0xcd5407ae7FA70C6ea1f77eDD7A3dde34BED187F5)   |
+| MetaLampOFTv1 | Polygon Amoy     | 40267 | 0x00000000000000000000000054d412Fee228E13A42F38bC760faEFfDFE838536 | [polygonscan](https://amoy.polygonscan.com/address/0x54d412Fee228E13A42F38bC760faEFfDFE838536#code) |
 
 <p align="center">
   <a href="https://docs.layerzero.network/v2/developers/evm/oft/quickstart" style="color: #a77dff">Quickstart</a> | <a href="https://docs.layerzero.network/contracts/oapp-configuration" style="color: #a77dff">Configuration</a> | <a href="https://docs.layerzero.network/contracts/options" style="color: #a77dff">Message Execution Options</a> | <a href="https://docs.layerzero.network/v2/developers/evm/technical-reference/deployed-contracts" style="color: #a77dff">Endpoint, MessageLib, & Executor Addresses</a> | <a

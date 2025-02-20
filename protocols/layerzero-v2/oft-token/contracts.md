@@ -18,7 +18,7 @@
 - ✅ Деплой OFT-токена
 - ✅ Настройка OFT-токена
 - ✅ Оценка газа через скрипт
--  Транзакции c OFT-токеном
+- ✅ Транзакции c OFT-токеном
 -  Как работать с PreCrime
 -  Коротко о других особенностях:
    -  Работа с нативными токенами
@@ -636,6 +636,7 @@ npx hardhat lz:oapp:wire --oapp-config layerzero.config.ts
 
 ```bash
 pnpm send \
+--rpc-url <rpc_url> \
 <sender_address> \
 <src_oft_oapp_address> \
 <dst_recipient_address> \
@@ -647,6 +648,7 @@ pnpm send \
 Например:
 ```bash
 pnpm send \
+--rpc-url sepolia \
 0x32bb35Fc246CB3979c4Df996F18366C6c753c29c \
 0xcd5407ae7FA70C6ea1f77eDD7A3dde34BED187F5 \
 0x32bb35Fc246CB3979c4Df996F18366C6c753c29c \
@@ -669,7 +671,11 @@ pnpm send \
 
 После чего можно взять хэш транзакции и проверить статус омничейн транзакции в [layerzeorscan](https://testnet.layerzeroscan.com/). Если статус "Delivered", то можно проверить баланс в сети назначения, а также `totalSupply` токена в обоих сетях.
 
+*Примечание:* Рекомендую сначала запустить команду без флага `--broadcast` и посмотреть сколько fee нужно заплатить. Например когда я попытался сделать транзакцию в обратную сторону мне посчитали очень большой `nativeFee` в Polygon Amoy. Видимо какая-то проблема с получением priceFeed.
+
 ### Что если транзакции не выполнилась?
+
+
 
 ### lzRead
 
