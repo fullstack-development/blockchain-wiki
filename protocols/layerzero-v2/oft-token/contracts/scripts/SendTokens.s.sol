@@ -15,7 +15,7 @@ contract SendTokens is Script {
     function run(address sender, address token, address recipient, uint256 amountLD, uint32 dstEid)
         external
     {
-        bytes memory options = OptionsBuilder.newOptions().addExecutorLzReceiveOption(50000, 0);
+        bytes memory options = OptionsBuilder.newOptions().addExecutorLzReceiveOption(80000, 0);
         SendParam memory sendParam = SendParam({
             dstEid: dstEid,
             to: addressToBytes32(recipient),

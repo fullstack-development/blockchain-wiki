@@ -11,6 +11,7 @@
     "gas:lzCompose": "forge script scripts/GasProfiler.s.sol:GasProfilerScript --via-ir --sig 'run_lzCompose(string,address,uint32,address,uint32,address,address,bytes[],uint256,uint256)'",
     "gas:lzReceive": "forge script scripts/GasProfiler.s.sol:GasProfilerScript --sig 'run_lzReceive(string,address,(uint32,bytes32,uint32,address,bytes[],uint256,uint256))'",
     "gas:run": "forge script scripts/OFTProfilerExample.s.sol:OFTProfilerExample --sig 'run(uint256)'",
+    "send": "forge script scripts/SendTokens.s.sol --via-ir --rpc-url sepolia --sig 'run(address,address,address,uint256,uint32)'",
     "lint": "$npm_execpath run lint:js && $npm_execpath run lint:sol",
     "lint:fix": "eslint --fix '**/*.{js,ts,json}' && prettier --write . && solhint 'contracts/**/*.sol' --fix --noPrompt",
     "lint:js": "eslint '**/*.{js,ts,json}' && prettier --check .",

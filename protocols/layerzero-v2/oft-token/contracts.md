@@ -628,6 +628,47 @@ npx hardhat lz:oapp:wire --oapp-config layerzero.config.ts
 
 ## Отправка транзакции
 
+Отправка омничейн токенов не самое простое занятие. К сожалению без скриптов тут сложновато, поэтому я накидал foundry-скрипт [SendTokens](./contracts/scripts/SendTokens.s.sol) который позволяет пересылать токены между контрактами MetaLampOFTv1 в сетях Ethereum Sepolia и Polygon.
+
+Для того, чтобы отправить токены, нужно иметь их на балансе, поэтому я добавил токену функцию `claim`, которая позволит вам получить 100 MLOFTv1 токенов. Сделать это лучше всего в эксплорерах, ссылки на контракт [тут](./contracts/README.md).
+
+Команда для отправки токенов такая:
+
+```bash
+pnpm send \
+<sender_address> \
+<src_oft_oapp_address> \
+<dst_recipient_address> \
+<amount_LD> \
+<dst_eid> \
+--broadcast
+```
+
+Например:
+```bash
+pnpm send \
+0x32bb35Fc246CB3979c4Df996F18366C6c753c29c \
+0xcd5407ae7FA70C6ea1f77eDD7A3dde34BED187F5 \
+0x32bb35Fc246CB3979c4Df996F18366C6c753c29c \
+1000000000000000000 \
+40267 \
+--broadcast
+```
+
+Результат:
+```bash
+== Logs ==
+  GUID: 
+  0x832318c92f1b0abe842f8ec5059d47aad92df8ca8de6a94b4bf8be301b689952
+  MessagingReceipt: nonce: 4, fee: 75768729416500
+  OFTReceipt: amountSentLD: 1000000000000000000, amountReceivedLD: 1000000000000000000
+
+##### sepolia
+✅  [Success] Hash: 0xb791c8aae098e5bfe449ddf58e012beebbf1ff2c3b81960adddd6abc67a7620e
+```
+
+После чего можно взять хэш транзакции и проверить статус омничейн транзакции в [layerzeorscan](https://testnet.layerzeroscan.com/). Если статус "Delivered", то можно проверить баланс в сети назначения, а также `totalSupply` токена в обоих сетях.
+
 ### Что если транзакции не выполнилась?
 
 ### lzRead
@@ -747,5 +788,6 @@ pnpm gas:run 10
   - [Docs: LayerZero Glossary](https://docs.layerzero.network/v2/home/glossary#lzcompose)
   - [Docs: USDT0](https://docs.usdt0.to/)
   - [Audit: USDT0](https://github.com/Everdawn-Labs/usdt0-audit-reports)
+  - [layerzeroscan](https://layerzeroscan.com/)
 
 
