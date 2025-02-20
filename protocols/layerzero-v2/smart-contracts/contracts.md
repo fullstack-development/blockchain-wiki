@@ -570,17 +570,34 @@ OFT.send{ value: fee.nativeFee }(sendParam, fee, refundAddress);
 
 Можете посмотреть как это делается в тестах - [test_send_oft](./contracts/test/foundry/MetaLampOFTv1.t.sol).
 
-##### Лимит gasLimit
+#### Лимит gasLimit
 
 Выше мы обсуждали `enforcedOptions`, так вот если вы уже посчитали среднее значение по газу для конкретной сети, можно задать их через [OAppOptionsType3::setEnforcedOptions](https://github.com/LayerZero-Labs/devtools/blob/05443835db976b7a528b883b19ddf02cb7f36d89/packages/oapp-evm/contracts/oapp/libs/OAppOptionsType3.sol#L28).
 
-## Как задеплоить и настроить
+### Оценка лимитов токена
+
+Для OFT также существует дополнительная функция предварительной проверки [OFTCore::quoteOFT](https://github.com/LayerZero-Labs/devtools/blob/05443835db976b7a528b883b19ddf02cb7f36d89/packages/oft-evm/contracts/OFTCore.sol#L108). Эта функция может настраиваться в зависимости от нужд конкретного токена.
+
+```solidity
+function quoteOFT(
+    SendParam calldata _sendParam
+) external view virtual returns (
+    OFTLimit memory oftLimit, // Опциональные настраиваемые лимиты. По умолчанию от 0 до totalSupply.
+    OFTFeeDetail[] memory oftFeeDetails, // Комиссии токена, тоже опционально.
+    OFTReceipt memory oftReceipt // amountSentLD и amountReceivedLD
+) {}
+```
+
+## Как задеплоить и настроить OFT-токен
+
+### Деплой
+
+
 
 ## PreCrime
 
-## msgInspector
-
-## Настройки газа
+// TODO lzRead??
+В сети назначения есть множество способов для проверки транзакции пред оправкой и доп. мер предосторожностей: механизм `quote`, `msgInspector`, `enforcedOptions`, с сетью назначения все несколько сложнее, потому что мы не знаем состояние другого блокчейна.
 
 ## Особенности
 
