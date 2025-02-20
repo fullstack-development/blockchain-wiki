@@ -11,10 +11,10 @@
    - ✅ Local and Shared decimals
    - ✅ Как работать с msgInspector
    - ✅ Combine options
-   - Механизмы получения сообщения
--  Работа с газом.
-   -  Как посчитать
-   -  Как ограничить.
+   - ✅ Механизмы получения сообщения
+- ✅ Работа с газом.
+   - ✅ Как посчитать
+   - ✅ Как ограничить.
 -  Деплой OFT-токена
 -  Настройка OFT-токена
 -  Транзакции c OFT-токеном
@@ -523,7 +523,56 @@ function _lzReceive(
 
 *Важно!* Для того, чтобы OApp мог работать с `composed` транзакциями, ему необходимо реализовать интерфейс [IOAppComposer](https://github.com/LayerZero-Labs/devtools/blob/05443835db976b7a528b883b19ddf02cb7f36d89/packages/oapp-evm/contracts/oapp/interfaces/IOAppComposer.sol). В базовой реализации эта функция не добавлена.
 
-### Оценка gasLimit перед отправкой сообщения
+### Оценка gasLimit и комиссий стека безопасности перед отправкой сообщения
+
+Для того, чтобы транзакция в сети назначения была успешно проверена и выполнена необходимо правильно рассчитать две вещи:
+1. Количество газа, которое потребуется для выполнения этой транзакции в сети назначения (`gasLimit`);
+2. Стоимость этого газа в сети назначения выраженная в токенах исходной сети (например вы отправляете сообщение в Polygon из эфира - фактическая оплата будет в POL, но отправить нужно в ETH).
+
+С первым пунктом все не очень очевидно. Для каждого блокчейна нужно либо выставлять `gasLimit` с запасом, либо эмпирическим путем рассчитывать какое-то наиболее подходящее значение. Есть способы как проверить верность установленного значения перед отправкой, но об этом чуть позже.
+
+Сейчас для примера возьмем усредненное значение для EVM-сетей в 80_000 единиц газа. Тогда опции будут выглядеть так:
+
+```solidity
+bytes memory options = OptionsBuilder.newOptions().addExecutorLzReceiveOption(80000, 0);
+```
+
+Далее необходимо сформировать структуру [SendParam](https://github.com/LayerZero-Labs/devtools/blob/05443835db976b7a528b883b19ddf02cb7f36d89/packages/oft-evm/contracts/interfaces/IOFT.sol#L10) заполнив все необходимые поля:
+
+```solidity
+SendParam memory sendParam = SendParam(
+    40267, // EID
+    addressToBytes32(0x32bb35Fc246CB3979c4Df996F18366C6c753c29c), // Адрес фактического получателя токенов в сети назначения
+    1e18, // amountLD
+    1e18, // minAmountLD
+    options,
+    "", // composeMsg
+    ""  // oftCmd
+);
+```
+
+Чтобы посчитать комиссию для стека безопасности и на газ, вызываем функцию [OFTCore::quoteSend](https://github.com/LayerZero-Labs/devtools/blob/05443835db976b7a528b883b19ddf02cb7f36d89/packages/oft-evm/contracts/OFTCore.sol#L145).
+
+```solidity
+MessagingFee memory fee = OFT.quoteSend(sendParam, false);
+```
+
+![oft-core-quote-send](./img/oft-core-quote-send.png)  
+*Граф вызовов quoteSend*
+
+Если посмотреть на схему шаги 1 и 2 очень похожи на `OFTCore::send`, только в этом случае не вызывается `_debit`. На третьем шаге вызов идет в `Endpoint::quote`, где будет выполнен расчет на основе настроенного стека безопасности и установленного Executor, с учетом цен на газ в сети назначения. Расчеты выполняемые Endpoint выходят за рамки этой статьи, поэтому вы можете посмотреть логику расчета самостоятельно [здесь](https://github.com/LayerZero-Labs/LayerZero-v2/blob/a3637f851ab1b987bff9fb3db31bf40a59ac374b/packages/layerzero-v2/evm/protocol/contracts/EndpointV2.sol#L55).
+
+Зная комиссию, мы знаем сколько токенов нужно передать на ее оплату и можем отправлять сообщение:
+
+```solidity
+OFT.send{ value: fee.nativeFee }(sendParam, fee, refundAddress);
+```
+
+Можете посмотреть как это делается в тестах - [test_send_oft](./contracts/test/foundry/MetaLampOFTv1.t.sol).
+
+##### Лимит gasLimit
+
+Выше мы обсуждали `enforcedOptions`, так вот если вы уже посчитали среднее значение по газу для конкретной сети, можно задать их через [OAppOptionsType3::setEnforcedOptions](https://github.com/LayerZero-Labs/devtools/blob/05443835db976b7a528b883b19ddf02cb7f36d89/packages/oapp-evm/contracts/oapp/libs/OAppOptionsType3.sol#L28).
 
 ## Как задеплоить и настроить
 
