@@ -5,7 +5,7 @@
 План статьи:
 - ✅ Определите проблему или задачу.
 - ✅ Показать пример создания простого OApp.
--  Показать пример создания OFT токена:
+- ✅ Показать пример создания OFT токена:
    - ✅ Наследуемые контракты
    - ✅ Механизмы отправки сообщения
    - ✅ Local and Shared decimals
@@ -19,12 +19,10 @@
 - ✅ Настройка OFT-токена
 - ✅ Оценка газа через скрипт
 - ✅ Транзакции c OFT-токеном
-- ✅  Как работать с PreCrime
--  Коротко о других особенностях:
-   -  Работа с нативными токенами
-   -  Refund address
+- ✅ Как работать с PreCrime
+- ✅ Опции
 -  Заключение
--  Ссылки
+- ✅ Ссылки
 
 ## Введение
 
@@ -781,15 +779,188 @@ pnpm gas:run 10
 
 Но главная особенность в том, что по задумке PreCrime должен работать в связке со стеком безопасности и отменять транзакции через `skip` еще до того, как они попадут в Executor.
 
-Например ваш бекенд может отслеживать все транзакции и использовать контракты PreCrime для проверки некоторых инвариантов протокола - в случае обнаружения вредоносной транзакции она будет принудительно отменена еще в `MessagingChannel`.
+Например бекенд может отслеживать все транзакции и использовать контракты PreCrime для проверки некоторых инвариантов протокола - в случае обнаружения вредоносной транзакции она будет принудительно отменена еще в `MessagingChannel`.
 
-## Особенности
+## Какие бывают опции и как они устроены?
 
-### Native drop
+У протокола LayerZero много особенностей и мелких деталей, которые хорошо бы знать при разработке. Одна из таких деталей, с которой неизбежно придется столкнуться - это options.
 
-### Подробнее про опции?
+Ранее мы уже неоднократно использовали `options`, точнее их самую простую форму, которая выглядит примерно так:
+
+```solidity
+uint128 GAS_LIMIT = 50000; // gasLimit для Executor
+uint128 MSG_VALUE = 0; // msg.value для функции lzReceive() для дальнейшей доставки нативных токенов в сети назначения (в wei)
+
+bytes memory options = OptionsBuilder.newOptions().addExecutorLzReceiveOption(GAS_LIMIT, MSG_VALUE);
+```
+
+За формирование опций на смарт-контрактах отвечает библиотека [OptionsBuilder](https://github.com/LayerZero-Labs/devtools/blob/main/packages/oapp-evm/contracts/oapp/libs/OptionsBuilder.sol). Мы видим, что первое, что делает `OptionsBuilder`, это вызов функции `newOptions`.
+
+```solidity
+function newOptions() internal pure returns (bytes memory) {
+    return abi.encodePacked(TYPE_3);
+}
+```
+
+Также `OFTCore` наследуется от смарт-контракта `OAppOptionsType3`, который проверяет, чтобы опции обязательно были `TYPE_3` через функцию `_assertOptionsType3`.
+
+Наконец, функция `OptionsBuilder::addExecutorLzReceiveOption` имеет модификатор `onlyType3`.
+
+За что отвечает `TYPE_3` и почему нельзя использовать другие два типа (`TYPE_1` и `TYPE_2`)? Ответ прост: `TYPE_N` - это версия контейнера, которая явно определяет как в каком порядке будут закодированы опции и как их декодировать в сети назначения.
+
+`TYPE_1` и `TYPE_2` это наследие первой версии протокола (legacy types), в LayerZero v2 используется `TYPE_3`.
+
+### Содержимое контейнера
+
+Что должно быть определено в опциях?
+- `TYPE_1` - определял только лимит газа;
+- `TYPE_2` - к лимиту газа добавлял количество нативных токенов для передачи и получателя этих токенов;
+- `TYPE_3` - устроен сложнее, но при этом более гибко. Подробнее ниже.
+  
+`TYPE_3` - это массив `bytes` который включает:
+- тип контейнера;
+- id воркера;
+- размер опций;
+- тип опций;
+- непосредственно сами опции.
+
+Первым добавляется тип, на данный момент - это всегда `TYPE_3`.
+
+![option-type-3-1](./img/options-type-3-1.png)
+
+Далее мы немного нарушим порядок, потому что после добавления типа контейнера идет формирование самих опций. Если продолжить наш пример с `addExecutorLzReceiveOption`, то следующий вызов отправляется в библиотеку конкретного воркера (например `ExecutorOptions`).
+
+```solidity
+// OptionsBuilder library
+function addExecutorLzReceiveOption(
+    bytes memory _options,
+    uint128 _gas,
+    uint128 _value
+) internal pure onlyType3(_options) returns (bytes memory) {
+    bytes memory option = ExecutorOptions.encodeLzReceiveOption(_gas, _value);
+    return addExecutorOption(_options, ExecutorOptions.OPTION_TYPE_LZRECEIVE, option);
+}
+
+// ---------------------------------------------------------
+
+// ExecutorOptions library
+function encodeLzReceiveOption(uint128 _gas, uint128 _value) internal pure returns (bytes memory) {
+    return _value == 0 ? abi.encodePacked(_gas) : abi.encodePacked(_gas, _value);
+}
+```
+
+В данном случае выполняется конкатинация `GAS_LIMIT` и `MSG_VALUE`.
+
+![options-type-3-5](./img/options-type-3-5.png)
+
+После этого добавляются другие данные:
+
+```solidity
+function addExecutorOption(
+    bytes memory _options,  // контейнер с типом
+    uint8 _optionType, // тип опции
+    bytes memory _option // сама опция
+) internal pure onlyType3(_options) returns (bytes memory) {
+    return
+        abi.encodePacked(
+            _options,
+            ExecutorOptions.WORKER_ID, // ID Executor, потому что опции для lzReceive
+            _option.length.toUint16() + 1, // размер опции, сформированной на предыдущем шаге + 1 для optionType
+            _optionType,
+            _option
+        );
+}
+```
+
+Теперь заполняем оставшиеся данные в которые входят id воркера, размер опции и тип опции.
+
+- **Worker ID**. На данный момент существуют только два воркера:
+  - Executor (id = 1), за обработку этих опций отвечает библиотека [ExecutorOptions](https://github.com/LayerZero-Labs/LayerZero-v2/blob/main/packages/layerzero-v2/evm/messagelib/contracts/libs/ExecutorOptions.sol);
+  - DVN (id = 2), за обработку опций DVN отвечает библиотека [DVNOptions](https://github.com/LayerZero-Labs/LayerZero-v2/blob/main/packages/layerzero-v2/evm/messagelib/contracts/uln/libs/DVNOptions.sol).
+- **Option Type**. Сейчас их 5 и последний тип добавили совсем недавно:
+  - `OPTION_TYPE_LZRECEIVE` = 1;
+  - `OPTION_TYPE_NATIVE_DROP` = 2;
+  - `OPTION_TYPE_LZCOMPOSE` = 3;
+  - `OPTION_TYPE_ORDERED_EXECUTION` = 4;
+  - `OPTION_TYPE_LZREAD` = 5;
+
+Итоговые параметры для `addExecutorLzReceiveOption` будут такие:
+- worker id = 1 (Executor);
+- option type = 1 (OPTION_TYPE_LZRECEIVE);
+- option length = 17 (gasLimit занимает 16 байт + 1 байт на тип опции).
+
+*Примечание:* Функция `addExecutorLzReceiveOption` также добавляет `value`, в нашем случае value = 0, поэтому ничего не добавлено. Если бы мы указали количество нативных токенов для передачи, то `type.length` был бы равен 33 байта (gasLimit 16 + value 16 + type 1).
+
+В результате получаем такой набор байт `0003010011010000000000000000000000000000c350`:
+
+```bash
+0003 01 0011 01 0000000000000000000000000000c350
+
+opt.type | work.id | ex.opt.type.length | ex.opt.type |         option          |
+uint16   | uint8   | uint16             | uint8       | uint128         | 0     |
+3        | 1       | 17                 | 1           | 50000 (gasLimit)| value |
+```
+
+![options-type-3-2-4](./img/options-type-3-2-4.png)  
+*Расположение данных в контейнере TYPE_3*
+
+### Особенности задания опций
+
+Остальные опции можно посмотреть в [OptionsBuilder](https://github.com/LayerZero-Labs/devtools/blob/main/packages/oapp-evm/contracts/oapp/libs/OptionsBuilder.sol).
+
+Также рекомендую попробовать сформировать разные виды опций в [remix](https://remix.ethereum.org/#url=https://docs.layerzero.network/LayerZero/contracts/OptionsGenerator.sol&lang=en&optimize=false&runs=200&evmVersion=null&version=soljson-v0.8.26+commit.8a97fa7a.js).
+
+#### Работа с gasLimit
+
+Параметр `gasLimit` высчитывается на основе профилирования расхода газа в сети назначения. Смысл в том, что "стоимость" опкодов может отличаться от блокчейна к блокчейну. 
+
+Каждый блокчейн имеет лимиты на максимальное количество газа, которое можно передать в сеть назначения (`nativeCap`). Эту информацию можно получить вызвав `Executor::dstConfig(dstEid)`, функция отдает структуру `DstConfig`:
+
+```solidity
+struct DstConfig {
+    uint64 baseGas;
+    uint16 multiplierBps;
+    uint128 floorMarginUSD;
+    uint128 nativeCap;
+}
+```
+
+- `baseGas`: Фиксированная стоимость газа для базовых операций, таких как верификация через стек безопасности и выполнение `lzReceive`. То есть минимальное количество газа для самого маленького сообщения;
+- `multiplierBps`: Множитель в базисных пунктах (1 базисный пункт = 0,01%), который используется для расчёта дополнительного газа в зависимости от размера сообщения;
+- `floorMarginUSD`: Минимальная плата в USD для предотвращения спама и покрытия затрат. Если рассчитанная стоимость в USD (на основе размера сообщения и `priceFeed` в сети назначения) меньше этого значения, она устанавливается на уровне `floorMarginUSD`, чтобы предотвратить спам и покрыть минимальные затраты;
+- `nativeCap`: Максимальный лимит газа, который приложение (OApp) может указать для выполнения сообщения в сети назначения.
+
+Эти данные также можно запросить выполнив в проекте OApp команду:
+
+```bash
+npx hardhat lz:oapp:config:get:executor
+```
+
+#### Native drop
+
+Понятие `native drop` относится к передаче нативных токенов в сеть назначения. Например в опции `addExecutorLzReceiveOption` второй параметр служит для этих целей.
+Но есть также отдельная опция `addExecutorNativeDropOption` которая принимает в качестве параметров `amount` и `receiver` и не принимает количество газа.
+
+```solidity
+function addExecutorNativeDropOption(
+    bytes memory _options, // контейнер
+    uint128 _amount, // количество нативных токенов
+    bytes32 _receiver // получатель нативных токенов
+) internal pure onlyType3(_options) returns (bytes memory) {
+    bytes memory option = ExecutorOptions.encodeNativeDropOption(_amount, _receiver);
+    return addExecutorOption(_options, ExecutorOptions.OPTION_TYPE_NATIVE_DROP, option);
+}
+```
+
+*Примечание:* Ранее в протоколе было ограничение и на native drop, которое ровнялось 0.5 токена в эквиваленте нативного токена сети (например ETH, BNB и т.д.). Более того, было предостережение, что чем больше сумма, тем больше расходы на передачу. Сейчас об этом нет упоминаний, но нужно иметь в виду что такого рода ограничения тоже могут возникнуть.
 
 ## Заключение
+- Упомянуть про foundry, hardhat, тесты и готовый проект
+- Хорошая документация
+- Гибкость в настройке
+- Безопасность канала
+- Возможность накосячить
+  - Нужно учитывать особенности каждого чейна (лимиты по газу, стоймость опкодов, работу priceFeed, ограничения на передачу ETH)
 
 ## Ссылки
   - [GitHub: LayerZero v2](https://github.com/LayerZero-Labs/LayerZero-v2)
