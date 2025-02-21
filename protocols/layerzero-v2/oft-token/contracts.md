@@ -21,7 +21,7 @@
 - ✅ Транзакции c OFT-токеном
 - ✅ Как работать с PreCrime
 - ✅ Опции
--  Заключение
+- ✅ Заключение
 - ✅ Ссылки
 
 ## Введение
@@ -227,8 +227,7 @@ npx create-lz-oapp@latest
 ![oapp-inherits](./img/oapp-inherits.png)  
 *Схема наследований OFT-токена*
 
-// TODO добавить ссылки на репозиторий (типа этой [OFTCore](https://github.com/LayerZero-Labs/devtools/blob/main/packages/oft-evm/contracts/OFTCore.sol))
-Здесь можно также увидеть два дополнительных смарт-контракта (`OAppPreCrimeSimulator` и `OAppOptionsType3`), о которых мы поговорим чуть позже. Также видно, что `OApp` наследуется от `OAppCore` и может выполнять как отправку сообщений, так и их получение через `OAppSender` и `OAppReceiver`. 
+Здесь можно также увидеть два дополнительных смарт-контракта ([OAppPreCrimeSimulator](https://github.com/LayerZero-Labs/devtools/blob/main/packages/oapp-evm/contracts/precrime/OAppPreCrimeSimulator.sol) и [OAppOptionsType3](https://github.com/LayerZero-Labs/devtools/blob/main/packages/oapp-evm/contracts/oapp/libs/OAppOptionsType3.sol)), о которых мы поговорим чуть позже. Также видно, что [OApp](https://github.com/LayerZero-Labs/devtools/blob/main/packages/oapp-evm/contracts/oapp/OApp.sol) наследуется от [OAppCore](https://github.com/LayerZero-Labs/devtools/blob/main/packages/oapp-evm/contracts/oapp/OAppCore.sol) и может выполнять как отправку сообщений, так и их получение через [OAppSender](https://github.com/LayerZero-Labs/devtools/blob/main/packages/oapp-evm/contracts/oapp/OAppSender.sol) и [OAppReceiver](https://github.com/LayerZero-Labs/devtools/blob/main/packages/oapp-evm/contracts/oapp/OAppReceiver.sol). 
 
 *Примечание:* Не все захотят разворачивать проект, поэтому готовый код можно посмотреть [тут](./contracts/contracts/MetaLampOFTv1.sol), для нужно установить зависимости через `pnpm install` в папке `protocols/layerzero-v2/smart-contracts/contracts`. Либо сходить в репозиторий [LayerZero-Labs/devtools](https://github.com/LayerZero-Labs/devtools/blob/main/packages/oft-evm/contracts), в нем также есть все примеры.
 
@@ -955,12 +954,12 @@ function addExecutorNativeDropOption(
 *Примечание:* Ранее в протоколе было ограничение и на native drop, которое ровнялось 0.5 токена в эквиваленте нативного токена сети (например ETH, BNB и т.д.). Более того, было предостережение, что чем больше сумма, тем больше расходы на передачу. Сейчас об этом нет упоминаний, но нужно иметь в виду что такого рода ограничения тоже могут возникнуть.
 
 ## Заключение
-- Упомянуть про foundry, hardhat, тесты и готовый проект
-- Хорошая документация
-- Гибкость в настройке
-- Безопасность канала
-- Возможность накосячить
-  - Нужно учитывать особенности каждого чейна (лимиты по газу, стоймость опкодов, работу priceFeed, ограничения на передачу ETH)
+
+Стандарт OFT оставил у меня хорошее впечатление, он довольно гибкий и дает много возможностей для настройки токена. При этом "из коробки" предоставляется достаточно функционала для создания простого ERC20 OFT-токена.
+
+Также понравилась возможность быстро развернуть готовый проект, где есть готовые тесты плюс скрипты hardhat и foundry, которые позволяют легко задеплоить и настроить OApps в разных блокчейнах. Порадовали и скрипты для грубого профилирования расходов по газу, но с ними еще нужно подразобраться.
+
+Несмотря на надежность канала передачи данных протокола, все же могут возникать пограничные кейсы, особенно если токен нетипичный и включает какие-то комиссии, доп. административные функции или сложные механики. Поэтому всегда нужно очень внимательно проверять работоспособность OFT токена. Более того, у меня есть ощущение что проверять токен лучше в мейннете, потому что львиная часть протокола в офчейне: стек безопасности, исполнители и оценка комиссий в тестовых сетях может работать некорректно. Лучшее решение - это проведение аудитов кода, потому что даже команды таких крупных компаний, как Tether не застрахованы от ошибок.
 
 ## Ссылки
   - [GitHub: LayerZero v2](https://github.com/LayerZero-Labs/LayerZero-v2)
@@ -971,5 +970,3 @@ function addExecutorNativeDropOption(
   - [Docs: USDT0](https://docs.usdt0.to/)
   - [Audit: USDT0](https://github.com/Everdawn-Labs/usdt0-audit-reports)
   - [layerzeroscan](https://layerzeroscan.com/)
-
-
