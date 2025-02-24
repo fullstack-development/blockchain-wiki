@@ -18,7 +18,8 @@
   - [Algorithms and data structures](./algorithms/README.md)
   - <details open>
       <summary>Blockchains</summary>
-
+      
+      - [Bittensor](./blockchains/bittensor/bittensor.md)
       - [Polygon zkEVM](./blockchains/zk-evm-polygon/zk-evm-polygon.md)
       - <details>
           <summary>Scroll</summary>
