@@ -61,6 +61,7 @@
           - [Overview](./concepts/oracles/README.md)
           - [Uniswap TWAP vs oracle](./concepts/oracles/twap.md)
         </details>
+      - [Safe Singleton Factory](./concepts/safe-singleton-factory/README.md)
       - <details>
           <summary>Upgradeable contracts</summary>
 
