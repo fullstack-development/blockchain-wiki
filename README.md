@@ -144,6 +144,7 @@
 
       - [Aave v2](./protocols/aave-v2/README.md)
       - [Aerodrome](./protocols/aerodrome/README.md)
+      - [Algebra](./protocols/algebra/README.md)
       - [Aragon DAO v1](./protocols/aragon-dao-v1/README.md)
       - [Aragon DAO v2](./protocols/aragon-dao-v2/README.md)
       - [Compound v2](./protocols/compound-v2/README.md)
