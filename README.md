@@ -146,6 +146,7 @@
       - [Aerodrome](./protocols/aerodrome/README.md)
       - [Aragon DAO v1](./protocols/aragon-dao-v1/README.md)
       - [Aragon DAO v2](./protocols/aragon-dao-v2/README.md)
+      - [Cow Swap](./protocols/cow-swap/README.md)
       - [Compound v2](./protocols/compound-v2/README.md)
       - [Compound v3](./protocols/compound-v3/README.md)
       - [Curve](./protocols/curve/README.md)
