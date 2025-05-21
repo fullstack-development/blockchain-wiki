@@ -152,6 +152,8 @@
       - [Compound v2](./protocols/compound-v2/README.md)
       - [Compound v3](./protocols/compound-v3/README.md)
       - [Curve](./protocols/curve/README.md)
+      - [Eliza-Os-v2](./protocols/eliza-os-v2/README.md)
+      - [Polymarket](./protocols/polymarket/README.md)
       - [LayerZero v2](./protocols/layerzero-v2/README.md)
       - [Pendle](./protocols/pendle/README.md)
       - [Polymarket](./protocols/polymarket/README.md)
