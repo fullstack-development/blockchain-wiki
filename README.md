@@ -157,6 +157,7 @@
 
         - [Overview](./protocols/cow-dao/README.md)
         - [Arbitrate auctions](./protocols/cow-dao/arbitrate-auctions/README.md)
+        - [Mev blocker](./protocols/cow-dao/mev-blocker/README.md)
         </details>
       - [Curve](./protocols/curve/README.md)
       - [Eliza-Os-v2](./protocols/eliza-os-v2/README.md)
