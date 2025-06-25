@@ -151,6 +151,11 @@
       - [Aragon DAO v2](./protocols/aragon-dao-v2/README.md)
       - [Compound v2](./protocols/compound-v2/README.md)
       - [Compound v3](./protocols/compound-v3/README.md)
+      - <details>
+          <summary>Cow-Protocol</summary>
+
+          - [mev-blocker](./protocols/cow-protocol/mev-blocker/README.md)
+        </details>
       - [Curve](./protocols/curve/README.md)
       - [LayerZero v2](./protocols/layerzero-v2/README.md)
       - [Pendle](./protocols/pendle/README.md)
