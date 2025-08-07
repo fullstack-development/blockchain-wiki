@@ -151,6 +151,7 @@
       - <details>
           <summary><a href="./protocols/cow-dao/README.md">CoW DAO</a></summary>
 
+        - [arbitrate-autctions](./protocols/cow-dao/arbitrate-auctions/README.md)
         </details>
       - [Curve](./protocols/curve/README.md)
       - [Polymarket](./protocols/polymarket/README.md)
