@@ -71,6 +71,7 @@
           - [Proxy pattern](./concepts/upgradeable-contracts/method-3/readme.md)
           - [Strategy pattern](./concepts//upgradeable-contracts/method-4/readme.md)
           - [Diamond pattern](./concepts/upgradeable-contracts/method-5/readme.md)
+          - [Pendle routing way](./concepts/upgradeable-contracts/method-6/README.md)
         </details>
     </details>
   - <details>
