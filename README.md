@@ -52,6 +52,7 @@
         </details>
       - [Digital Signatures on ethereum](./concepts/digital-signature-on-ethereum/README.md)
       - [Hash time locked contract (HTLC)](./concepts/hash-time-locked-contracts/README.md)
+      - [Intent based protocols](./concepts/intent-based-protocols/README.md)
       - [keccak256](./concepts/keccak256/readme.md)
       - [Meta transactions](./concepts/meta-transactions/README.md)
       - [NFT staking](./concepts/nft-staking/README.md)
