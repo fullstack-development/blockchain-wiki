@@ -156,6 +156,7 @@
           <summary>CoW DAO</summary>
 
         - [Overview](./protocols/cow-dao/README.md)
+        - [Arbitrate auctions](./protocols/cow-dao/arbitrate-auctions/README.md)
         </details>
       - [Curve](./protocols/curve/README.md)
       - [Eliza-Os-v2](./protocols/eliza-os-v2/README.md)
