@@ -106,6 +106,23 @@
       - [Vesting](./DeFi/vesting/README.md)
     </details>
   - <details>
+      <summary>EIPs</summary>
+
+      - [EIP-140: REVERT instruction](./EIPs/eip-140/README.md)
+      - [EIP-712: Typed structured data hashing and signing](./EIPs/eip-712/README.md)
+      - [EIP-1014: Skinny CREATE2](./EIPs/eip-1014/README.md)
+      - [EIP-1153: Transient storage opcodes](./EIPs/eip-1153/README.md)
+      - [ERC-165: Standard Interface Detection](./EIPs/erc-165/README.md)
+      - [ERC-1363: Payable Token(transferAndCall)](./EIPs/erc-1363/README.md)
+      - [ERC-2981: NFT Royalty Standard](./EIPs/erc-2981/README.md)
+      - [ERC-4337: Account Abstraction Using Alt Mempool](./EIPs/erc-4337/README.md)
+      - [ERC-4626: Tokenized Vaults](./EIPs/erc-4626/README.md)
+      - [ERC-6372: Contract clock](./EIPs/erc-6372/README.md)
+      - [ERC-6900: Modular Smart Contract Accounts and Plugins](./EIPs/erc-6900/README.md)
+      - [ERC-6909: Minimal Multi-Token Interface](./EIPs/erc-6909/README.md)
+      - [ERC-7579: Minimal Modular Smart Accounts](./EIPs/erc-7579/README.md)
+    </details>
+  - <details>
       <summary>Ethereum virtual machine</summary>
 
       - [Intro](./ethereum-virtual-machine/intro/README.md)
@@ -124,24 +141,6 @@
       - [Uniswap-v2](./guides/uniswap-v2/README.md)
       - [Uniswap-v3](./guides/uniswap-v3/README.md)
     </details>
-  - <details>
-      <summary>EIPs</summary>
-
-      - [EIP-140: REVERT instruction](./EIPs/eip-140/README.md)
-      - [EIP-712: Typed structured data hashing and signing](./EIPs/eip-712/README.md)
-      - [EIP-1014: Skinny CREATE2](./EIPs/eip-1014/README.md)
-      - [EIP-1153: Transient storage opcodes](./EIPs/eip-1153/README.md)
-      - [ERC-165: Standard Interface Detection](./EIPs/erc-165/README.md)
-      - [ERC-1363: Payable Token(transferAndCall)](./EIPs/erc-1363/README.md)
-      - [ERC-2981: NFT Royalty Standard](./EIPs/erc-2981/README.md)
-      - [ERC-4337: Account Abstraction Using Alt Mempool](./EIPs/erc-4337/README.md)
-      - [ERC-4626: Tokenized Vaults](./EIPs/erc-4626/README.md)
-      - [ERC-6372: Contract clock](./EIPs/erc-6372/README.md)
-      - [ERC-6900: Modular Smart Contract Accounts and Plugins](./EIPs/erc-6900/README.md)
-      - [ERC-6909: Minimal Multi-Token Interface](./EIPs/erc-6909/README.md)
-      - [ERC-7579: Minimal Modular Smart Accounts](./EIPs/erc-7579/README.md)
-    </details>
-
   - <details>
       <summary>Protocols</summary>
 
