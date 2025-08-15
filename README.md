@@ -113,6 +113,7 @@
       - [EIP-712: Typed structured data hashing and signing](./EIPs/eip-712/README.md)
       - [EIP-1014: Skinny CREATE2](./EIPs/eip-1014/README.md)
       - [EIP-1153: Transient storage opcodes](./EIPs/eip-1153/README.md)
+      - [EIP-7702: Set Code for EOAs](./EIPs/eip-7702/README.md)
       - [ERC-165: Standard Interface Detection](./EIPs/erc-165/README.md)
       - [ERC-1363: Payable Token(transferAndCall)](./EIPs/erc-1363/README.md)
       - [ERC-2981: NFT Royalty Standard](./EIPs/erc-2981/README.md)
