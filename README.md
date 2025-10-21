@@ -114,6 +114,7 @@
       - [EIP-1014: Skinny CREATE2](./EIPs/eip-1014/README.md)
       - [EIP-1153: Transient storage opcodes](./EIPs/eip-1153/README.md)
       - [ERC-165: Standard Interface Detection](./EIPs/erc-165/README.md)
+      - [ERC-1271: Standard Signature Validation Method for Contracts](./EIPs/erc-1271/README.md)
       - [ERC-1363: Payable Token(transferAndCall)](./EIPs/erc-1363/README.md)
       - [ERC-2981: NFT Royalty Standard](./EIPs/erc-2981/README.md)
       - [ERC-4337: Account Abstraction Using Alt Mempool](./EIPs/erc-4337/README.md)
