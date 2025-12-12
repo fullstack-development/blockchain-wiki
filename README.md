@@ -167,6 +167,7 @@
       - [LayerZero v2](./protocols/layerzero-v2/README.md)
       - [Pendle](./protocols/pendle/README.md)
       - [Polymarket](./protocols/polymarket/README.md)
+      - [T-REX (ERC-3643)](./protocols/t-rex/README.md)
       - [Uma. Optimistic oracle](./protocols/uma/README.md)
       - [Uniswap v4](./protocols/uniswap-v4/README.md)
       - [Uniswap X](./protocols/UniswapX/README.md)
