@@ -168,6 +168,7 @@
       - [LayerZero v2](./protocols/layerzero-v2/README.md)
       - [Pendle](./protocols/pendle/README.md)
       - [Polymarket](./protocols/polymarket/README.md)
+      - [Reserve](./protocols/reserve/README.md)
       - [Uma. Optimistic oracle](./protocols/uma/README.md)
       - [Uniswap v4](./protocols/uniswap-v4/README.md)
       - [Uniswap X](./protocols/UniswapX/README.md)
