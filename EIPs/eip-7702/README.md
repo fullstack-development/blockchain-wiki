@@ -186,7 +186,7 @@ function test_workWithStorage(uint256 value) external {
 
 ![](./images/eip-7702-storage-example.png)
 
-Полный пример кода теста `test_workWithStorage` в [Delegation.t.sol](./contracts/storageExample/Delegation.sol).
+Полный пример кода теста `test_workWithStorage` в [Delegation.t.sol](./contracts/storageExample/Delegation.t.sol).
 
 _Важно!_ На самом деле конструктор смарт-контракта все еще может применяться для immutable переменных, так как такие переменные будут частью байткода смарт-контракта после деплоя смарт-контракта.
 
@@ -224,7 +224,7 @@ function test_workWithStorage(uint256 initialValue) external {
 }
 ```
 
-### Проверки типа msg.sender == tx.origin.
+### Проверки типа msg.sender == tx.origin
 
 Раньше смарт-контракты использовали условие `tx.origin == msg.sender` для двух вещей:
 1. Проверить, что код выполняется от имени EOA, так как `tx.origin` не может быть смарт-контрактом.
@@ -366,7 +366,7 @@ function test_checkSendNativeCurrency(uint256 value) external {
 
 ### Конфликт переменных хранилища для EOA
 
-EOA может может делегировать выполнение разным смарт-контрактам: прикрепляя и открепляя их. Вновь прикрепленный смарт-контракт может легко повлиять на переменные хранилища, которые были записаны предыдущим смарт-контрактом.
+EOA может делегировать выполнение разным смарт-контрактам: прикрепляя и открепляя их. Вновь прикрепленный смарт-контракт может легко повлиять на переменные хранилища, которые были записаны предыдущим смарт-контрактом.
 
 ![](./images/eip-7702-collisions-example.png)
 
