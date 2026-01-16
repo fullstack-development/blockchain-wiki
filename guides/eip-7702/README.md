@@ -199,7 +199,7 @@ struct Call {
 
 **Добавляем функцию `execute()` на `Wallet.sol`**
 
-Теперь пришло время добавить функцию execute() на смарт-контракт Wallet.sol.
+Теперь пришло время добавить функцию `execute()` на смарт-контракт Wallet.sol.
 
 ```solidity
 import {ModeLib} from "@erc7579/lib/ModeLib.sol";
@@ -225,10 +225,24 @@ contract Wallet is ERC1155Holder, ERC721Holder {
 Но мы выполним это согласно аналогично ERC-7579:
 
 ```solidity
-import {ModeLib} from "@erc7579/lib/ModeLib.sol";
+import {
+    CallType,
+    ExecType,
+    ModeLib,
+    ModeCode,
+    CALLTYPE_BATCH,
+    EXECTYPE_DEFAULT,
+    EXECTYPE_TRY,
+    CALLTYPE_SINGLE
+} from "@erc7579/lib/ModeLib.sol";
 
 contract Wallet is ERC1155Holder, ERC721Holder {
     using ModeLib for ModeCode;
+
+    error UnsupportedCallType(CallType callType);
+    error UnsupportedExecType(ExecType execType);
+    event Executed(address indexed sender, ModeCode indexed mode, bytes executionCalldata);
+    event TryExecuteUnsuccessful(uint256 batchExecutionindex, bytes result);
 
     /**
      * @notice Выполнение операции на аккаунте
@@ -312,6 +326,8 @@ contract Wallet is ExecutionHelper, ERC1155Holder, ERC721Holder {
 ...
 
 contract Wallet is ExecutionHelper, ERC1155Holder, ERC721Holder {
+    error OnlySelf();
+
     ...
 
     modifier onlySelf() {
@@ -354,11 +370,12 @@ contract Wallet is ExecutionHelper, ERC1155Holder, ERC721Holder {
     }
 
     mapping(bytes32 salt => bool isUsed) _isSaltUsed;
+    mapping(bytes32 salt => bool isCancelled) _isSaltCancelled;
 
     ...
 
     function execute(ExecutionRequest calldata request, bytes calldata signature) external payable {
-        WalletValidator.checkRequest(request, signature, _isSaltUsed);
+        WalletValidator.checkRequest(request, signature, _isSaltUsed, _isSaltCancelled);
 
         _isSaltUsed[request.salt] = true; // отмечаем, что подпись использована для защиты от Replay атаки
         _execute(request.mode, request.executionCalldata);
@@ -374,8 +391,7 @@ contract Wallet is ExecutionHelper, ERC1155Holder, ERC721Holder {
 
 Вся магия заключается в проверке подписи, которая вынесена в отдельную библиотеку [WalletValidator.sol](./contracts/src/libraries/WalletValidator.sol) и может быть реализована на ваш вкус.
 
-Мой вариант выглядит следующим образом:
-
+Мой вариант концептуально выглядит следующим образом:
 ```solidity
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.30;
@@ -478,6 +494,7 @@ abstract contract StorageHelper {
     // Переносим наш маппинг в эту структуру
     struct Storage {
         mapping(bytes32 salt => bool isUsed) isSaltUsed;
+        mapping(bytes32 salt => bool isCancelled) isSaltCancelled;
     }
 
     // Вспомогательная функция, которая будет предоставлять доступ к нашему хранилищу
@@ -514,7 +531,7 @@ contract Wallet is ExecutionHelper, StorageHelper, ERC1155Holder, ERC721Holder {
 
 Думаю ты заметил, что у пользователя нет возможности "передумать" после того, как он выдал подпись третьему лицу. В нынешней реализации только `deadline` спасет пользователя: подпись устареет и операцию будет невозможно выполнить.
 
-Однако этого недостаточно. Поэтому подумай и реализуй функцию `cancelSignature()`. Эта функция должна вызываться только EOA и никем другим.
+Однако этого недостаточно. Поэтому подумай и реализуй функцию `cancelSignature()` самостоятельно или найди ее в референсной реализации. Эта функция должна вызываться только EOA и никем другим.
 
 _Подсказка!_ Функция `cancelSignature()` должна принимать `salt` ордера и записывать его в отдельный mapping. При валидации подписи нужно проверять, что подпись не отменена.
 
