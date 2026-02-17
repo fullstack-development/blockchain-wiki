@@ -31,7 +31,7 @@ lzRead позволяет контракту запрашивать и полу�
 
 1. **Формирование запроса** — приложение собирает запрос: какие данные нужны, из какой целевой сети, на каком блоке или времени. Запрос кодируется в стандартную команду по схеме BQL.
 2. **Отправка запроса** — команда отправляется через Endpoint LayerZero по отдельному read-каналу (не обычному messaging). По каналу явно передается, что это запрос с ожиданием ответа, а не просто смена состояния.
-3. **Получение и верификация данных (DVN data fetch and verification)** — DVN принимают запрос, забирают данные с архивной ноды требуемой сети и при необходимости применяют off-chain compute: **lzMap** (преобразование ответов из одной или нескольких сетей) и **lzReduce** (агрегация нескольких ответов в один). Каждый DVN формирует криптографический хеш результата для проверки целостности. 
+3. **Получение и верификация данных (DVN data fetch and verification)** — DVN принимают запрос, забирают данные с архивной ноды требуемой сети и при необходимости применяют off-chain compute: **lzMap** (преобразование ответов из одной или нескольких сетей) и **lzReduce** (агрегация нескольких ответов в один). Каждый DVN формирует криптографический хеш результата для проверки целостности.
 _В этой статье мы делаем один запрос в одну сеть, поэтому Compute не настраиваем; как задать lzMap/lzReduce для сценариев с несколькими сетями или агрегацией — можно посмотреть в [документации lzRead](https://docs.layerzero.network/v2/developers/evm/lzread/overview#lzmap)._
 4. **Доставка ответа (Response handling)** — после верификации нужным числом DVN Endpoint доставляет итоговый ответ обратно в исходную сеть. Контракт-получатель обрабатывает его в `_lzReceive()`: декодирует payload и использует полученные данные.
 
@@ -65,10 +65,10 @@ _В этой статье мы делаем один запрос в одну с
 
 ```solidity
 constructor(
-    address _endpoint,           
-    uint32 _readChannel,         
-    uint32 _targetEid,          
-    address _targetPoolAddress,  
+    address _endpoint,
+    uint32 _readChannel,
+    uint32 _targetEid,
+    address _targetPoolAddress,
     address _config              // контракт LzReadConfig — деплоим первым
 ) OAppRead(_endpoint, _config) Ownable(_config) {
     READ_CHANNEL = _readChannel;
@@ -169,7 +169,7 @@ function _lzReceive(
 
 Настройка бывает двух видов: на **endpoint** (библиотеки send/receive, конфиг ReadLib с executor и требования к DVN) и на **OApp** (enforced options, при необходимости смена read-канала).
 
-Вызывать настройку на endpoint может только сам OApp или его **делегат**; настройку на OApp (например `setEnforcedOptions`) — только **владелец** OApp. По этой причине, на `UniswapV3ObserveRead.sol` в конструкторе назначаем владельцем и делегатом наш контракт конфига.  
+Вызывать настройку на endpoint может только сам OApp или его **делегат**; настройку на OApp (например `setEnforcedOptions`) — только **владелец** OApp. По этой причине, на `UniswapV3ObserveRead.sol` в конструкторе назначаем владельцем и делегатом наш контракт конфига.
 
 Контракт конфига помогает настроить эти параметры [LzReadConfig.sol](./LzReadConfig.sol).
 
@@ -206,6 +206,7 @@ _Совет:_ после деплоя сразу делайте **Pin contract f
 В примере: **origin** = Base Sepolia, **data chain** = Ethereum Sepolia.
 
 1. Откройте [Remix](https://remix.ethereum.org/) и добавьте контракты [LzReadConfig.sol](./LzReadConfig.sol) и [UniswapV3ObserveRead.sol](./UniswapV3ObserveRead.sol).
+
 2. Собираем все данные для деплоя:
 - Endpoint берем для сети origin с [этой](https://docs.layerzero.network/v2/deployments/deployed-contracts) таблицы;
 - EID для data chain берем [тут](https://docs.layerzero.network/v2/deployments/deployed-contracts);
@@ -215,22 +216,36 @@ _Совет:_ после деплоя сразу делайте **Pin contract f
 - libConfigParams для origin сети тоже находим [тут](https://docs.layerzero.network/v2/deployments/read-contracts). Он включает в себя такие параметры как: executor, requiredDVNCount, optionalDVNCount, optionalDVNThreshold, requiredDVNs, optionalDVNs;
 - enforced использует уже известный readChannel, msgType = 1, и options, который мы кодируем через специальную созданную тулзу;
 
-![alt text](./images/set-config.png)
-![alt text](./images/setconfig-dependencies.png)
+    ![alt text](./images/set-config.png)
+
+    ![alt text](./images/setconfig-dependencies.png)
+
 3. Задеплойте сначала [LzReadConfig.sol](./LzReadConfig.sol) (аргумент: endpoint), затем [UniswapV3ObserveRead.sol](./UniswapV3ObserveRead.sol) (endpoint, readChannel, targetEid, targetPoolAddress, адрес LzReadConfig).
-![alt text](./images/remix-first-deploy.png)
-![alt text](./images/remix-second-deploy.png)
+
+    ![alt text](./images/remix-first-deploy.png)
+
+    ![alt text](./images/remix-second-deploy.png)
+
 4. Далее, на LzReadConfig вызовите `configureFull(OApp, readChannel, readLib, libConfigParams, 0, enforcedParams)`.
-![alt text](./images/configuration.png)
+    ![alt text](./images/configuration.png)
+
 5. Оцените комиссию: `quoteObserve(secondsAgos, extraOptions, false)` на задеплоенном контракте `UniswapV3ObserveRead.sol`. Например, `secondsAgos = [3600,0]` для TWAP за последний час. `extraOptions` можно передать `0x` — enforced options уже заданы.
-![Вызов quoteObserve в Remix](./images/remix-quote-observe.png)
+
+    ![Вызов quoteObserve в Remix](./images/remix-quote-observe.png)
+
 6. В Remix в поле **Value** укажите `fee.nativeFee` (в Wei) и вызовите `readObserve(secondsAgos, extraOptions)`.
-![Value и вызов readObserve](./images/remix-read-observe-value.png)
+
+    ![Value и вызов readObserve](./images/remix-read-observe-value.png)
+
 7. После подтверждения транзакции, в сканере по адресу `UniswapV3ObserveRead.sol` можно найти состояние вашего запроса [testnet.layerzeroscan.com](https://testnet.layerzeroscan.com/).
-![LayerZero Scan: страница транзакции (Inflight → Delivered)](./images/layerzero-scan-delivered.png).
-![LayerZero Scan: Response transaction](./images/layerzero-scan-response.png)
+
+    ![LayerZero Scan: страница транзакции (Inflight → Delivered)](./images/layerzero-scan-delivered.png).
+
+    ![LayerZero Scan: Response transaction](./images/layerzero-scan-response.png)
+
 8. После статуса **Delivered** в origin будет вызван `_lzReceive` и эмитировано событие `ObserveResult`. Проверить можно по ссылке на Response transaction в разделе логов.
-![Remix: логи события ObserveResult](./images/remix-observe-result-logs.png)
+
+    ![Remix: логи события ObserveResult](./images/remix-observe-result-logs.png)
 
 ## Заключение
 
