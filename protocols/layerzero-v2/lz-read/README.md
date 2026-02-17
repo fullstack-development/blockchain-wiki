@@ -217,18 +217,30 @@ _Совет:_ после деплоя сразу делайте **Pin contract f
 
 ![alt text](./images/set-config.png)
 ![alt text](./images/setconfig-dependencies.png)
+
+
 3. Задеплойте сначала [LzReadConfig.sol](./LzReadConfig.sol) (аргумент: endpoint), затем [UniswapV3ObserveRead.sol](./UniswapV3ObserveRead.sol) (endpoint, readChannel, targetEid, targetPoolAddress, адрес LzReadConfig).
 ![alt text](./images/remix-first-deploy.png)
 ![alt text](./images/remix-second-deploy.png)
+
+
 4. Далее, на LzReadConfig вызовите `configureFull(OApp, readChannel, readLib, libConfigParams, 0, enforcedParams)`.
 ![alt text](./images/configuration.png)
+
+
 5. Оцените комиссию: `quoteObserve(secondsAgos, extraOptions, false)` на задеплоенном контракте `UniswapV3ObserveRead.sol`. Например, `secondsAgos = [3600,0]` для TWAP за последний час. `extraOptions` можно передать `0x` — enforced options уже заданы.
 ![Вызов quoteObserve в Remix](./images/remix-quote-observe.png)
+
+
 6. В Remix в поле **Value** укажите `fee.nativeFee` (в Wei) и вызовите `readObserve(secondsAgos, extraOptions)`.
 ![Value и вызов readObserve](./images/remix-read-observe-value.png)
+
+
 7. После подтверждения транзакции, в сканере по адресу `UniswapV3ObserveRead.sol` можно найти состояние вашего запроса [testnet.layerzeroscan.com](https://testnet.layerzeroscan.com/).
 ![LayerZero Scan: страница транзакции (Inflight → Delivered)](./images/layerzero-scan-delivered.png).
 ![LayerZero Scan: Response transaction](./images/layerzero-scan-response.png)
+
+
 8. После статуса **Delivered** в origin будет вызван `_lzReceive` и эмитировано событие `ObserveResult`. Проверить можно по ссылке на Response transaction в разделе логов.
 ![Remix: логи события ObserveResult](./images/remix-observe-result-logs.png)
 
