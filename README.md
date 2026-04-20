@@ -146,6 +146,7 @@
       - [EIP-7702. Создание смарт-контракта `Wallet.sol`](./guides/eip-7702/README.md)
       - [Uniswap-v2](./guides/uniswap-v2/README.md)
       - [Uniswap-v3](./guides/uniswap-v3/README.md)
+      - [Uniswap v3/v4: как считать human-readable цену по tick и sqrtPriceX96](./guides/uniswap-v3-and-v4-price-guide/README.md)
     </details>
   - <details>
       <summary>Protocols</summary>
